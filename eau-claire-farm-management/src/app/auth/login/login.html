@@ -1,9 +1,9 @@
 <div class="flex w-full min-h-screen bg-[#EEEDED]">
     <div class="w-[55%] p-5 bg-[#BD9F69] rounded-tr-[12px] rounded-br-[12px] relative flex flex-col overflow-hidden">
-        <img src="http://10.86.157.81:9000/logo/eau-claire-logo.png" alt="Eau Claire"
+        <img src="http://100.97.252.23:9000/logo/eau-claire-logo.png" alt="Eau Claire"
             class="absolute -top-4 -left-4 w-48 h-48 max-h-full max-w-full object-contain z-10" />
 
-        <img src="http://10.86.157.81:9000/images/login-page.png" alt="thumbnail"
+        <img src="http://100.97.252.23:9000/images/login-page.png" alt="thumbnail"
             class="w-full h-full scale-300 object-cover translate-y-[40px] translate-x-[0px]" />
     </div>
 
@@ -34,7 +34,8 @@
                             class="h-4 w-4 text-[#BD9F69] focus:ring-[#BD9F69] border-gray-300 rounded">
                         <label for="rememberMe" class="ml-2 text-sm text-black">Ghi nhớ tên đăng nhập</label>
                     </div>
-                    <a href="#" class="text-sm text-[#BD9F69] hover:underline">Quên mật khẩu?</a>
+                    <a [routerLink]="['/forget-password']" class="text-sm text-[#BD9F69] hover:underline">Quên mật
+                        khẩu?</a>
                 </div>
                 <!-- Nút đăng nhập -->
                 <button type="submit"
