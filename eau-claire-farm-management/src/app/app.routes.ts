@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { Login } from './auth/login/login';
-import { ForgetPassword } from './auth/forget-password/forget-password';
+import { Login } from './auth/containters/login/login';
+import { ForgetPassword } from './auth/containters/forget-password/forget-password';
 
 export const routes: Routes = [
     // Mặc định vào trang login
