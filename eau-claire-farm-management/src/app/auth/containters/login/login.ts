@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 //import { AuthService } from '../../core/services/auth.service';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
-import { FormsInput } from "../../ui-components/forms-input/forms-input";
+import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
 import { Button } from "../../ui-components/button/button";
 
 @Component({

@@ -1,1 +1,11 @@
-<p>otp-verification works!</p>
+<app-auth-layout>
+    <h2 class="text-3xl font-bold text-center mb-4">Nhận mã OTP</h2>
+    <app-primary-forms-input type="text" id="email-otp" label="Gửi mã qua email"
+        placeholder="Nhập email"></app-primary-forms-input>
+
+    <div class="text-center">
+        <a [routerLink]="['/forget-password']" class="text-[16px] text-[#BD9F69] hover:underline">
+            Quay lại
+        </a>
+    </div>
+</app-auth-layout>

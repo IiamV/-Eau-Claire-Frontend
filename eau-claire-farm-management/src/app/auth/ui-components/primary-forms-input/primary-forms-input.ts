@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-forms-input',
+  selector: 'app-primary-forms-input',
   imports: [],
-  templateUrl: './forms-input.html',
-  styleUrl: './forms-input.css'
+  templateUrl: './primary-forms-input.html',
+  styleUrl: './primary-forms-input.css'
 })
 export class FormsInput {
   @Input() id: string = '';
