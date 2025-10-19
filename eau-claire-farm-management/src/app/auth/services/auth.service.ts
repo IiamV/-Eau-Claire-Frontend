@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { otp } from "../../models/otp";
 import { catchError, Observable, throwError, tap, map, of } from "rxjs";
+import { tempToken, accessToken, login } from "../../models/auth";
 import { environment } from "../../../environments/environment.dev";
 
 @Injectable({
@@ -69,7 +70,7 @@ export class AuthService {
                         console.error("Bad Request - Invalid OTP or missing required fields");
                         break;
                     default:
-                        console.error("Request OTP failed: ", error);
+                        console.error("OTP verification failed:", error);
                         break;
                 }
                 return throwError(() => new Error(
