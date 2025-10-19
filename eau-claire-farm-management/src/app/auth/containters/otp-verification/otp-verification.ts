@@ -99,7 +99,7 @@ export class OtpVerification {
     this.otpPayload = {
       ...this.otpPayload,
       email: this.otpPayload.method === 'email' ? this.requestFormControl.value : '',
-      phone: this.otpPayload.method === 'phone' ? this.requestFormControl.value : ''
+      phone: this.otpPayload.method === 'sms' ? this.requestFormControl.value : ''
     };
 
     // Call API to request OTP

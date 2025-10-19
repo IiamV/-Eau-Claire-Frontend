@@ -1,5 +1,5 @@
 export interface otp {
-    method: 'email' | 'phone' | null;
+    method: 'email' | 'sms' | null;
     userId: number;
     deviceId: string;
     phone: string;
