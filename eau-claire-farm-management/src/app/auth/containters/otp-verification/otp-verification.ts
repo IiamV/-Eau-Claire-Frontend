@@ -1,30 +1,118 @@
 import { Component, signal } from '@angular/core';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
 import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
-import { RouterLink } from "@angular/router";
+import { Router,RouterLink, ActivatedRoute } from "@angular/router";
+import { FormBuilder, FormGroup, FormControl, Validators, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { tempToken, accessToken } from '../../../models/auth';
+import { otp } from '../../../models/otp';
 
 @Component({
   selector: 'app-otp-verification',
-  imports: [AuthLayout, RouterLink],
+  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule],
   templateUrl: './otp-verification.html',
   styleUrl: './otp-verification.css'
 })
+
 export class OtpVerification {
-  // Sử dụng signal để quản lý trạng thái đã gửi OTP hay chưa
-  // Ban đầu, isOtpSent là false => Hiển thị form nhập email
+  
+  /**
+   * Signal used to manage OTP sent status.
+   * false: show email/phone input form
+   * true: show OTP input form
+   */
   isOtpSent = signal(false);
-  userEmail = 'An3439201@gmail.com'
+
+  // FormControl for email or phone input
+  requestFormControl = new FormControl('');
+
+  // Payload object to send OTP request or verification
+  otpPayload: otp = {
+    method: null,
+    userId: 0,
+    deviceId: '',
+    phone: '',
+    email: '',
+    inputOtp: '',
+  };
+  // tempTokenPayload! : tempToken;
 
   // Mảng để lưu trữ các giá trị của ô OTP
   otp: string[] = new Array(6).fill('');
 
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private authService: AuthService,
+  ) {
+    // Subscribe to query parameters to get verification method (email/phone)
+    this.route.queryParams.subscribe(params => {
+      this.otpPayload.method = params['verifyMethod'];
+    })
+  }
+
   /**
-   * Hàm này được gọi khi người dùng nhấn nút "Gửi mã xác nhận"
-   * Nó sẽ chuyển trạng thái để hiển thị giao diện nhập OTP
+   * Triggered when the user clicks "Send OTP".
+   * Validates OTP length and calls verifyOtp API.
    */
-  sendOtp() {
-    // Gọi API để gửi OTP
-    this.isOtpSent.set(true);
+  sendOtp(): void {
+    let currentOtp = this.otp.join('');
+    // Validate OTP
+    if (currentOtp.length < 6) {
+      console.log("Not valid OTP");
+      return;
+    }
+
+    // Update payload with entered OTP
+    this.otpPayload = {
+      ...this.otpPayload,
+      inputOtp: currentOtp
+    };
+    console.log("Current Payload:", this.otpPayload);
+
+    // Call API to verify OTP
+    this.authService.verifyOtp(this.otpPayload).subscribe({
+      next: (response) => {
+        console.log("Request OTP Success:", response);
+        this.isOtpSent.set(true);
+      },
+      error: (error) => {
+        console.log("Request OTP Failed:", error);
+        this.isOtpSent.set(false);
+      }
+    });
+  }
+
+  /**
+   * Sends OTP request to the server using email or phone input.
+   * Validates input before calling the API.
+   */
+  requestOtp(): void {
+    // Validate input
+    if (!this.requestFormControl.value) {
+      console.log("No email or phone number provided.");
+      return;
+    }
+
+    // Prepare payload based on verification method
+    this.otpPayload = {
+      ...this.otpPayload,
+      email: this.otpPayload.method === 'email' ? this.requestFormControl.value : '',
+      phone: this.otpPayload.method === 'phone' ? this.requestFormControl.value : ''
+    };
+
+    // Call API to request OTP
+    this.authService.requestOtp(this.otpPayload).subscribe({
+      next: (response) => {
+        console.log("Request OTP Success:", response);
+        this.isOtpSent.set(true);
+      },
+      error: (error) => {
+        console.log("Request OTP Failed:", error);
+        this.isOtpSent.set(false);
+      }
+    });
   }
 
   /**
