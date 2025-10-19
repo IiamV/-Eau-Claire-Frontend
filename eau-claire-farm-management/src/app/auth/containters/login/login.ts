@@ -21,6 +21,6 @@ export class Login {
   ) { }
 
   onLoginSubmit() {
-    this.router.navigate(['/forget-password']);
+    this.router.navigate(['/forgot-password']);
   }
 }
