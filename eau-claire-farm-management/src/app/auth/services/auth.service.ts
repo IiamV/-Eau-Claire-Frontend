@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { otp } from "../../models/otp";
-import { catchError, Observable, throwError, tap } from "rxjs";
+import { catchError, Observable, throwError, tap, of } from "rxjs";
 import { environment } from "../../../environments/environment.dev";
 
 @Injectable({
@@ -14,6 +14,8 @@ export class AuthService {
      * Retrieved from the environment configuration.
      */
     private baseUrl = environment.baseUrl;
+    private requestUrl = `${this.baseUrl}/sys/request-otp`;
+    private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
 
     /**
      * Constructor for AuthService
@@ -27,9 +29,8 @@ export class AuthService {
      * @returns Observable<any> - Emits the API response on success or an error on failure.
      */
     requestOtp(payload: otp): Observable<any> {
-        const url = `${this.baseUrl}/sys/request-otp`;
-
-        return this.http.post(url, payload).pipe(
+        // return of(true);
+        return this.http.post(this.requestUrl, payload).pipe(
             tap((response) => {
                 console.log('Request OTP success:', response);
             }),
@@ -57,9 +58,8 @@ export class AuthService {
      * @returns Observable<any> - Emits API verification result or an error.
      */
     verifyOtp(payload: otp): Observable<any> {
-        const url = `${this.baseUrl}/sys/verify-otp`;
-
-        return this.http.post(url, payload).pipe(
+        // return of(true);
+        return this.http.post(this.verifyUrl, payload).pipe(
             tap((response) => {
                 console.log('Verify OTP success:', response);
             }),
