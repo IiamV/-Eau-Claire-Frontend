@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { AuthLayout } from '../../ui-components/auth-layout/auth-layout';
-import { ReactiveFormsModule, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { otp } from '../../../models/otp';
-import { AuthService } from '../../services/auth.service';
-import { tempToken } from '../../../models/auth';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Button } from '../../ui-components/button/button';
 
 @Component({
