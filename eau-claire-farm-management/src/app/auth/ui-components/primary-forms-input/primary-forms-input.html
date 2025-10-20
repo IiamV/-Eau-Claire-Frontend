@@ -2,6 +2,13 @@
     <label [for]="id" class="block font-medium text-[14px] text-black">
         {{ label }}
     </label>
-    <input [type]="type" [id]="id" [placeholder]="placeholder" [value]="value"
+    <input 
+        [type]="type" 
+        [id]="id" 
+        [placeholder]="placeholder" 
+        [value]="value"
+        [disabled]="disabled"
+        (input)="onInputChange($event)"
+        (blur)="onBlur()"
         class="mt-1 w-full p-2 text-sm border border-[#BD9F69] rounded-md focus:outline-none focus:ring-1 focus:ring-[#A1834F] custom-input">
 </div>
