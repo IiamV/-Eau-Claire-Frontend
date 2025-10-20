@@ -21,9 +21,10 @@ export class OtpVerification {
    * true: show OTP input form
    */
   isOtpSent = signal(false);
+  isLoading = signal(false);
 
   // FormControl for email or phone input
-  requestFormControl = new FormControl('', Validators.required);
+  requestFormControl = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
 
   // Payload object to send OTP request or verification
   otpPayload: otp = {
@@ -39,9 +40,8 @@ export class OtpVerification {
   otp: string[] = new Array(6).fill('');
 
   constructor(
-    private router: Router, 
     private route: ActivatedRoute,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     // Subscribe to query parameters to get verification method (email/phone)
     this.route.queryParams.subscribe(params => {
@@ -61,6 +61,8 @@ export class OtpVerification {
       return;
     }
 
+    this.isLoading.set(true);
+
     // Update payload with entered OTP
     this.otpPayload = {
       ...this.otpPayload,
@@ -73,10 +75,15 @@ export class OtpVerification {
       next: (response) => {
         console.log("Request OTP Success:", response);
         this.isOtpSent.set(true);
+        this.isLoading.set(true);
       },
       error: (error) => {
         console.log("Request OTP Failed:", error);
         this.isOtpSent.set(false);
+        this.isLoading.set(false);
+      },
+      complete: () => {
+        this.isLoading.set(false);
       }
     });
   }
@@ -91,6 +98,13 @@ export class OtpVerification {
       console.log("No email or phone number provided.");
       return;
     }
+
+    if (this.requestFormControl.invalid) {
+      console.log("Invalid email or phone number.");
+      return;
+    }
+
+    this.isLoading.set(true);
 
     // Prepare payload based on verification method
     this.otpPayload = {
@@ -108,6 +122,10 @@ export class OtpVerification {
       error: (error) => {
         console.log("Request OTP Failed:", error);
         this.isOtpSent.set(false);
+      },
+      complete: () => {
+        this.isLoading.set(false);
+        console.log("Request OTP Completed");
       }
     });
   }

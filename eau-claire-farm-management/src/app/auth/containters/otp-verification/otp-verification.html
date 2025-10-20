@@ -10,7 +10,7 @@
         </p>
 
         <!-- Form nhập email -->
-        <form (ngSubmit)="requestOtp()" >
+        <form (ngSubmit)="requestOtp()">
             <div class="mb-2">
                 <label for="email-otp" class="block text-sm font-medium text-gray-600 mb-2">
                     Gửi mã qua {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}
@@ -19,7 +19,8 @@
                     <input 
                         [formControl]="requestFormControl"  
                         [type]="otpPayload.method === 'email' ? 'email' : 'tel'" 
-                        id="otp" 
+                        id="otp"
+                        [disabled]="isLoading()"
                         placeholder="Nhập {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}"
                         class="w-full px-4 py-3 border border-[#BD9F69] rounded-lg focus:ring-1 focus:ring-[#BD9F69] focus:border-[#BD9F69] outline-none transition" />
                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
@@ -33,6 +34,7 @@
             </div>
 
             <button type="submit"
+                [disabled]="isLoading()"
                 class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-[#A1834F] transition-all duration-300 mt-4 mb-6 shadow hover:shadow-lg">
                 Gửi mã xác nhận
             </button>
@@ -67,13 +69,13 @@
 
         <div class="text-center text-gray-500 mb-6">
             <span>Hết hạn sau: 04:55 (Chỉnh sau)</span><br>
-            <a (click)="requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
+            <a (click)="!isLoading() && requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
                 Không nhận được mã? Gửi lại
             </a>
         </div>
 
         <button
-            (click)="sendOtp()"
+            (click)="!isLoading() && sendOtp()"
             class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 mb-6 shadow hover:shadow-lg cursor-pointer">
             Xác nhận
         </button>
