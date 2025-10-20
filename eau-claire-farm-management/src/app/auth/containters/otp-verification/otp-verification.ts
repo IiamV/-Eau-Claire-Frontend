@@ -1,11 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
-import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
 import { Router,RouterLink, ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, FormControl, Validators, FormsModule } from '@angular/forms';
+import { FormControl, Validators, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { tempToken, accessToken } from '../../../models/auth';
 import { otp } from '../../../models/otp';
 
 @Component({
@@ -25,7 +23,7 @@ export class OtpVerification {
   isOtpSent = signal(false);
 
   // FormControl for email or phone input
-  requestFormControl = new FormControl('');
+  requestFormControl = new FormControl('', Validators.required);
 
   // Payload object to send OTP request or verification
   otpPayload: otp = {
@@ -36,7 +34,6 @@ export class OtpVerification {
     email: '',
     inputOtp: '',
   };
-  // tempTokenPayload! : tempToken;
 
   // Mảng để lưu trữ các giá trị của ô OTP
   otp: string[] = new Array(6).fill('');

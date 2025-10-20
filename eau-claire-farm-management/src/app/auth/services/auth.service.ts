@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { otp } from "../../models/otp";
-import { catchError, Observable, throwError, tap, map, of } from "rxjs";
-import { tempToken, accessToken, login } from "../../models/auth";
+import { catchError, Observable, throwError, tap } from "rxjs";
 import { environment } from "../../../environments/environment.dev";
 
 @Injectable({
