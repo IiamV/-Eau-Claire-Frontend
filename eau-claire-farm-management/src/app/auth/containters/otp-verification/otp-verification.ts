@@ -64,7 +64,7 @@ export class OtpVerification {
     let currentOtp = this.otp.join('');
     // Validate OTP
     if (currentOtp.length < 6) {
-      console.log("Not valid OTP");
+      console.log("Invalid OTP");
       return;
     }
 
