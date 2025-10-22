@@ -27,24 +27,24 @@ export class AuthService {
 
     /**
      * Sends a request to generate and send an OTP to the user.
-     * @param payload OTP payload containing email/phone and other details
-     * @returns Observable of the API response
+     * @param payload - The OTP payload containing the user's email or phone number.
+     * @returns Observable<any> - Emits the API response on success or an error on failure.
      */
     requestOtp(payload: requestOtpRequest): Observable<any> {
         console.log("Request Payload:", payload);
         // return of(true);
         return this.http.post(this.requestUrl, payload).pipe(
             catchError((error) => {
-            console.error('Request OTP failed:', error);
-            return throwError(() => error);
+                console.error('Request OTP failed:', error);
+                return throwError(() => error);
             })
         );
-    }
+    };
 
     /**
      * Verifies the OTP entered by the user.
-     * @param payload OTP payload containing user input and verification details
-     * @returns Observable of the API response
+     * @param payload - OTP payload containing the code and contact info.
+     * @returns Observable<any> - Emits API verification result or an error.
      */
     verifyOtp(payload: verifyOtpRequest): Observable<any> {
         console.log("Verify Payload:", payload);

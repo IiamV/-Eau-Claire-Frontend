@@ -15,7 +15,7 @@ import { DeviceFingerprintService } from '../../services/device.service';
 })
 
 export class OtpVerification {
-  
+
   /**
    * Signal used to manage OTP sent status.
    * false: show email/phone input form
@@ -28,7 +28,7 @@ export class OtpVerification {
   requestFormControl = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
 
   // Payload object to send OTP request or verification
-  otpPayload:  requestOtpRequest | verifyOtpRequest = {
+  otpPayload: requestOtpRequest | verifyOtpRequest = {
     method: null,
     userId: 0,
     deviceId: '',
@@ -49,11 +49,11 @@ export class OtpVerification {
     this.route.queryParams.subscribe(params => {
       this.otpPayload.method = params['verifyMethod']
     }),
-    this.deviceService.getDeviceId().then((id) => {
-      if (id) {
-        this.otpPayload.deviceId = id;
-      }
-    })
+      this.deviceService.getDeviceId().then((id) => {
+        if (id) {
+          this.otpPayload.deviceId = id;
+        }
+      })
   }
 
   /**
