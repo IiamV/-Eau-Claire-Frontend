@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
-import { Router,RouterLink, ActivatedRoute } from "@angular/router";
+import { RouterLink, ActivatedRoute } from "@angular/router";
 import { FormControl, Validators, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { otp } from '../../../models/otp';
+import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
+import { DeviceFingerprintService } from '../../services/device.service';
 
 @Component({
   selector: 'app-otp-verification',
@@ -14,19 +15,20 @@ import { otp } from '../../../models/otp';
 })
 
 export class OtpVerification {
-  
+
   /**
    * Signal used to manage OTP sent status.
    * false: show email/phone input form
    * true: show OTP input form
    */
   isOtpSent = signal(false);
+  isLoading = signal(false);
 
   // FormControl for email or phone input
-  requestFormControl = new FormControl('', Validators.required);
+  requestFormControl = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
 
   // Payload object to send OTP request or verification
-  otpPayload: otp = {
+  otpPayload: requestOtpRequest | verifyOtpRequest = {
     method: null,
     userId: 0,
     deviceId: '',
@@ -39,14 +41,19 @@ export class OtpVerification {
   otp: string[] = new Array(6).fill('');
 
   constructor(
-    private router: Router, 
     private route: ActivatedRoute,
     private authService: AuthService,
+    private deviceService: DeviceFingerprintService
   ) {
     // Subscribe to query parameters to get verification method (email/phone)
     this.route.queryParams.subscribe(params => {
-      this.otpPayload.method = params['verifyMethod'];
-    })
+      this.otpPayload.method = params['verifyMethod']
+    }),
+      this.deviceService.getDeviceId().then((id) => {
+        if (id) {
+          this.otpPayload.deviceId = id;
+        }
+      })
   }
 
   /**
@@ -61,6 +68,8 @@ export class OtpVerification {
       return;
     }
 
+    this.isLoading.set(true);
+
     // Update payload with entered OTP
     this.otpPayload = {
       ...this.otpPayload,
@@ -73,10 +82,15 @@ export class OtpVerification {
       next: (response) => {
         console.log("Request OTP Success:", response);
         this.isOtpSent.set(true);
+        this.isLoading.set(true);
       },
       error: (error) => {
         console.log("Request OTP Failed:", error);
         this.isOtpSent.set(false);
+        this.isLoading.set(false);
+      },
+      complete: () => {
+        this.isLoading.set(false);
       }
     });
   }
@@ -91,6 +105,13 @@ export class OtpVerification {
       console.log("No email or phone number provided.");
       return;
     }
+
+    if (this.requestFormControl.invalid) {
+      console.log("Invalid email or phone number.");
+      return;
+    }
+
+    this.isLoading.set(true);
 
     // Prepare payload based on verification method
     this.otpPayload = {
@@ -108,6 +129,10 @@ export class OtpVerification {
       error: (error) => {
         console.log("Request OTP Failed:", error);
         this.isOtpSent.set(false);
+      },
+      complete: () => {
+        this.isLoading.set(false);
+        console.log("Request OTP Completed");
       }
     });
   }
