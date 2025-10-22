@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { otp } from "../../models/otp";
-import { catchError, Observable, throwError } from "rxjs";
-import { tempToken } from "../../models/auth";
-import { environment } from "../../../environments/environment";
+import { verifyOtpRequest, requestOtpRequest } from "../../models/auth/otp";
+import { catchError, Observable, throwError, tap, map, of } from "rxjs";
+import { loginRequest } from "../../models/auth/login";
+import { environment } from "../../../environments/environment.dev";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +13,11 @@ import { environment } from "../../../environments/environment";
 export class AuthService {
     // Base URL for all authentication-related API calls
     private baseUrl = environment.baseUrl
+    private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
+    private requestUrl = `${this.baseUrl}/sys/request-otp`;
+    private tokenUrl = `${this.baseUrl}/sys/token`;
+    private loginUrl = `${this.baseUrl}/sys/login`;
+    private resetPasswordUrl = `${this.baseUrl}/sys/reset-password`;
 
     /**
      * Constructor for AuthService
@@ -24,13 +30,13 @@ export class AuthService {
      * @param payload OTP payload containing email/phone and other details
      * @returns Observable of the API response
      */
-    requestOtp(payload: otp): Observable<any> {
-        const url = `${this.baseUrl}/sys/request-otp`;
-
-        return this.http.post(url, payload).pipe(
+    requestOtp(payload: requestOtpRequest): Observable<any> {
+        console.log("Request Payload:", payload);
+        // return of(true);
+        return this.http.post(this.requestUrl, payload).pipe(
             catchError((error) => {
             console.error('Request OTP failed:', error);
-            return throwError(() => new Error(error.message || 'OTP request failed'));
+            return throwError(() => error);
             })
         );
     }
@@ -40,31 +46,51 @@ export class AuthService {
      * @param payload OTP payload containing user input and verification details
      * @returns Observable of the API response
      */
-    verifyOtp(payload: otp): Observable<any> {
-        const url = `${this.baseUrl}/sys/verify-otp`;
-
-        return this.http.post(url, payload).pipe(
+    verifyOtp(payload: verifyOtpRequest): Observable<any> {
+        console.log("Verify Payload:", payload);
+        // return of(true);
+        return this.http.post(this.verifyUrl, payload).pipe(
             catchError((error) => {
-            console.error('Verify OTP failed:', error);
-            return throwError(() => new Error(error.message || 'OTP verification failed'));
+                console.error('Details:', error);
+                return throwError(() => error);
             })
         );
-    }
+    };
 
     /**
-     * Retrieves an access token after OTP verification.
-     * @param payload Temporary token payload for authentication
-     * @returns Observable of the API response containing access token
+     * Performs login using username and password credentials.
+     * @param payload - Login credentials object.
+     * @returns Observable<any> - Emits login response or throws an error.
      */
-    getAccessToken(payload: tempToken): Observable<any> {
-        const url = `${this.baseUrl}/sys/token`
-        console.log(payload)
-
-        return this.http.post(url, payload).pipe(
+    login(payload: loginRequest): Observable<any> {
+        console.log("Login Payload:", payload);
+        // return of(true);
+        // return throwError(() => new HttpErrorResponse({
+        //     error: 'Test Error',
+        //     status: 401
+        // }));
+        return this.http.post(this.loginUrl, payload).pipe(
+            tap((response: any) => {
+                console.log('Login success');
+                localStorage.setItem('access_token', response.access_token);
+            }),
+            map((response) => {
+                // Return only the necessary data from the response
+                let { access_token, ...data } = response;
+                return data;
+            }),
             catchError((error) => {
-                console.error('Get access token failed:', error);
-                return throwError(() => new Error(error.message || 'Get access token failed'));
+                console.error("Details:", error);
+                return throwError(() => error);
             })
+        );
+    };
+
+    resetPassword(payload: any): Observable<any> {
+        console.log("Reset Payload:", payload);
+        return of(true);
+        return this.http.post(this.resetPasswordUrl, payload).pipe(
+
         )
     }
 }

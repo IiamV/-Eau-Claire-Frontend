@@ -1,0 +1,37 @@
+@if (show()) {
+<div class="fixed inset-0 bg-[#EEEDED]/95 flex justify-center items-center z-[9999] animate-fadeIn">
+  <div class="flex flex-col items-center gap-8">
+    
+    <!-- Fish Icon -->
+    <div class="relative">
+        <svg width="85" height="85" viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M63.7507 42.5V44.2708M23.0215 42.5C26.3507 30.2458 40.5173 21.25 53.1257 21.25C65.734 21.25 74.5882 30.2458 77.9173 42.5C74.5882 54.7896 65.734 63.75 53.1257 63.75C40.5173 63.75 26.3507 54.7896 23.0215 42.5Z" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M56.6668 63.5019C52.0598 57.4697 49.5641 50.0901 49.5641 42.4998C49.5641 34.9096 52.0598 27.53 56.6668 21.4978M24.7918 37.7894C24.7918 28.3332 19.7626 21.1436 9.66889 19.479C6.12722 24.7915 6.12722 37.1873 10.4835 42.4998C6.0918 47.8123 6.0918 60.2082 9.66889 65.5207C19.7626 63.8561 24.7918 56.6665 24.7918 47.2103" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M37.0465 25.7126C36.1257 20.8251 32.4777 15.0167 28.334 10.625H48.8757C50.5562 10.6188 52.1841 11.2103 53.4687 12.2938C54.7533 13.3772 55.6109 14.8821 55.8881 16.5396L56.7027 21.498M56.7027 63.5021L55.8881 68.4605C55.6109 70.118 54.7533 71.6229 53.4687 72.7063C52.1841 73.7898 50.5562 74.3813 48.8757 74.3751H33.6465C37.0778 70.4845 38.9564 65.4666 38.9236 60.2792" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    
+    <!-- Wave Line -->
+    <div class="w-80 h-1 relative overflow-hidden">
+      <svg width="320" height="20" viewBox="0 0 320 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute">
+        <path d="M0 10 Q10 5, 20 10 T40 10 T60 10 T80 10 T100 10 T120 10 T140 10 T160 10 T180 10 T200 10 T220 10 T240 10 T260 10 T280 10 T300 10 T320 10" 
+              stroke="#000000" 
+              stroke-width="8" 
+              fill="none"
+              stroke-linecap="round"
+              class="animate-wave"/>
+      </svg>
+    </div>
+    
+    <!-- Loading Text -->
+    <div class="flex items-center gap-2 text-2xl font-bold text-gray-900">
+      <span>{{ message() }}</span>
+      <div class="flex gap-1">
+        <span class="w-2 h-2 bg-gray-900 rounded-full animate-dotPulse"></span>
+        <span class="w-2 h-2 bg-gray-900 rounded-full animate-dotPulse [animation-delay:0.2s]"></span>
+        <span class="w-2 h-2 bg-gray-900 rounded-full animate-dotPulse [animation-delay:0.4s]"></span>
+      </div>
+    </div>
+  </div>
+</div>
+}
