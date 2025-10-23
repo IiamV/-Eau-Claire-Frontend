@@ -35,6 +35,7 @@ export class OtpVerification {
     phone: '',
     email: '',
     inputOtp: '',
+    purpose: "login"
   };
 
   // Mảng để lưu trữ các giá trị của ô OTP

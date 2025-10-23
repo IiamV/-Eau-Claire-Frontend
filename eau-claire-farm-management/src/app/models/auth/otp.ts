@@ -3,7 +3,8 @@ export interface requestOtpRequest {
     userId: number,
     deviceId: string,
     phone: string,
-    email: string
+    email: string,
+    purpose: string
 }
 
 export interface requestOtpResponse {
@@ -18,7 +19,8 @@ export interface verifyOtpRequest {
     deviceId: string,
     phone: string,
     email: string,
-    inputOtp: string
+    inputOtp: string,
+    purpose: string
 }
 
 export interface verifyOtpResponse {
