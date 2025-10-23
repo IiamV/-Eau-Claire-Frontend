@@ -11,7 +11,7 @@ export class DeviceFingerprintService {
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
-    
+
     // Initialize the agent only in browser environment
     if (this.isBrowser) {
       this.fpPromise = FingerprintJS.load();

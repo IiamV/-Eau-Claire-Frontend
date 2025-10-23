@@ -6,10 +6,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
 import { DeviceFingerprintService } from '../../services/device.service';
+import { LoadingComponent } from "../../../shared/components/loading/loading";
 
 @Component({
   selector: 'app-otp-verification',
-  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule],
+  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule, LoadingComponent],
   templateUrl: './otp-verification.html',
   styleUrl: './otp-verification.css'
 })
@@ -65,7 +66,7 @@ export class OtpVerification {
     let currentOtp = this.otp.join('');
     // Validate OTP
     if (currentOtp.length < 6) {
-      console.log("Not valid OTP");
+      console.log("Invalid OTP");
       return;
     }
 
