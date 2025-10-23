@@ -65,10 +65,7 @@ export class AuthService {
     login(payload: loginRequest): Observable<any> {
         console.log("Login Payload:", payload);
         // return of(true);
-        return throwError(() => new HttpErrorResponse({
-            error: 'Test Error',
-            status: 401
-        }));
+        // return throwError(() => new Error('Unauthorized - Invalid credentials'));
         return this.http.post(this.loginUrl, payload).pipe(
             tap((response: any) => {
                 console.log('Login success');

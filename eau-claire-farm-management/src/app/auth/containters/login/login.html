@@ -66,10 +66,9 @@
             <app-button type="submit">
                 <span class="flex-grow text-center">Đăng nhập</span>
             </app-button>
-
-            <app-status-popup [isSuccess]="false" [title]="'titleTest'" [message]="'hehe'" [isOpen]="false"
-                [buttonText]="'am gay'" (close)="closePopup()">
-            </app-status-popup>
         </form>
+        <app-loading
+            [isShow]="isLoading()"
+            [message]="'Đang tải...'"></app-loading>
     </div>
 </app-auth-layout>

@@ -1,4 +1,6 @@
-/* Custom animations for the loading component */
+* {
+    font-family: 'Tinos', serif;
+}
 
 @keyframes fadeIn {
   from {
@@ -9,54 +11,34 @@
   }
 }
 
-@keyframes swim {
+@keyframes wave-flow {
   0%, 100% {
-    transform: translateX(0) rotate(0deg);
-  }
-  25% {
-    transform: translateX(-10px) rotate(-5deg);
+    transform: translateY(2px);
   }
   50% {
-    transform: translateX(0) rotate(0deg);
-  }
-  75% {
-    transform: translateX(10px) rotate(5deg);
+    transform: translateY(-2px);
   }
 }
 
-@keyframes wave {
+.animate-wave-flow {
+  animation: wave-flow 3s linear infinite;
+}
+
+@keyframes swim {
   0% {
-    transform: translateX(0);
+    transform: translateX(-80px) scaleX(1);
+  }
+  50% {
+    transform: translateX(80px) scaleX(1);
+  }
+  51% {
+    transform: translateX(80px) scaleX(-1);
   }
   100% {
-    transform: translateX(-40px);
+    transform: translateX(-80px) scaleX(-1);
   }
-}
-
-@keyframes dotPulse {
-  0%, 60%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  30% {
-    transform: scale(1.5);
-    opacity: 0.7;
-  }
-}
-
-/* Apply animations */
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-in;
 }
 
 .animate-swim {
   animation: swim 2s ease-in-out infinite;
-}
-
-.animate-wave {
-  animation: wave 1.5s linear infinite;
-}
-
-.animate-dotPulse {
-  animation: dotPulse 1.4s ease-in-out infinite;
 }
