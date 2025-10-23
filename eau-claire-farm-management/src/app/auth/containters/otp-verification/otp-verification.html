@@ -1,3 +1,7 @@
+<app-loading
+    [message]="'Đang tải...'"
+    [isShow]="isLoading()"
+></app-loading>
 <app-auth-layout>
     <div>
         @if (!isOtpSent()) {
