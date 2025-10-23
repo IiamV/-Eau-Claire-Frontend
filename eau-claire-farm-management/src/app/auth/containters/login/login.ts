@@ -32,12 +32,12 @@ export class Login {
     private deviceService: DeviceFingerprintService,
   ) {
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required, 
-                      Validators.pattern('^[a-zA-Z0-9.@]+$')]],
+      username: ['', [Validators.required,
+      Validators.pattern('^[a-zA-Z0-9.@]+$')]],
       password: ['', Validators.required],
       deviceId: [''],
     })
-   };
+  };
 
   ngOnInit() {
     this.deviceService.getDeviceId().then(
@@ -70,13 +70,13 @@ export class Login {
       console.log("Invalid form:", this.loginForm.value);
       return;
     }
-    
+
     this.isLoading.set(true);
     let loginPayload: loginRequest = {
       ...this.loginForm.value,
       deviceId: this.deviceId
     };
-    
+
     // console.log("Login Payload:", loginPayload);
     this.authService.login(loginPayload).subscribe({
       next: (response) => {
@@ -90,12 +90,12 @@ export class Login {
           case 401:
             console.log("Unauthorized - Invalid credentials");
             // this.router.navigate(['/forgot-password', ]);
-            this.redirecToForgotPassword();
+            // this.redirecToForgotPassword();
             break;
           case 409:
             console.log("Device is not verified");
             break;
-          case 500: 
+          case 500:
             console.log("Internal server error");
             break;
         }

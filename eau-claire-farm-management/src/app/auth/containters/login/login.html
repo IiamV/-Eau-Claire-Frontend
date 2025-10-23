@@ -12,22 +12,25 @@
             </app-primary-forms-input>
 
             <!-- Nhập mật khẩu -->
-            <app-primary-forms-input formControlName="password" id="password" label="Mật khẩu" type="password" placeholder="Nhập mật khẩu">
+            <app-primary-forms-input formControlName="password" id="password" label="Mật khẩu" type="password"
+                placeholder="Nhập mật khẩu">
             </app-primary-forms-input>
-            
+
             <div class="mb-1 h-5 relative w-full">
                 @if (errorMessage) {
-                    <div id="error" class="text-black position items-start inline-flex gap-1 mb-0 ml-4">
-                        <svg viewBox="0 0 24 24" class="w-4 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"> 
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12ZM12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25ZM12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z" fill="#ef4444"></path>
-                            </g>
-                        </svg>
-                        
-                        <p>{{ errorMessage }}</p>
-                    </div>
+                <div id="error" class="text-black position items-start inline-flex gap-1 mb-0 ml-4">
+                    <svg viewBox="0 0 24 24" class="w-4 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12ZM12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25ZM12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"
+                                fill="#ef4444"></path>
+                        </g>
+                    </svg>
+
+                    <p>{{ errorMessage }}</p>
+                </div>
                 }
             </div>
 
@@ -35,14 +38,20 @@
             <div class="flex items-center justify-between mb-6 mt-0">
                 <div class="inline-flex items-center">
                     <label class="flex items-center cursor-pointer relative">
-                        <input type="checkbox" id="rememberMe" checked class="peer h-5 w-5 cursor-pointer transition-all appearance-none shadow hover:shadow-md bg-white border-3 border-slate-800 checked:border-slate-800" id="check" />
-                        <span class="bg-white absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="black" stroke="black" stroke-width="1">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
+                        <input type="checkbox" id="rememberMe" checked
+                            class="peer h-5 w-5 cursor-pointer transition-all appearance-none shadow hover:shadow-md bg-white border-3 border-slate-800 checked:border-slate-800"
+                            id="check" />
+                        <span
+                            class="bg-white absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="black"
+                                stroke="black" stroke-width="1">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
                         </span>
                     </label>
-                    
+
                     <label for="rememberMe" class="ml-2 text-sm text-black">
                         Ghi nhớ tên đăng nhập
                     </label>

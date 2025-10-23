@@ -14,13 +14,14 @@
         </p>
 
         <!-- Form nhập email -->
-        <form (ngSubmit)="requestOtp()" >
+        <form (ngSubmit)="requestOtp()">
             <div class="mb-2">
                 <label for="email-otp" class="block text-sm font-medium text-gray-600 mb-2">
                     Gửi mã qua {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}
                 </label>
                 <div class="relative">
-                    <input [formControl]="requestFormControl"  [type]="otpPayload.method === 'email' ? 'email' : 'tel'" id="otp" placeholder="Nhập {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}"
+                    <input [formControl]="requestFormControl" [type]="otpPayload.method === 'email' ? 'email' : 'tel'"
+                        id="otp" placeholder="Nhập {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}"
                         class="w-full px-4 py-3 border border-[#BD9F69] rounded-lg focus:ring-1 focus:ring-[#BD9F69] focus:border-[#BD9F69] outline-none transition" />
                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-[#BD9F69]" fill="none"
@@ -43,7 +44,7 @@
             Quên mật khẩu
         </h2>
         <p class="text-center text-gray-500 mb-2">
-            Gửi mã OTP qua Email
+            Gửi mã OTP qua {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}
         </p>
 
         <div class="text-center bg-[#EEEDED] p-3 rounded-lg mx-auto mb-6 w-50 relative border border-[#BD9F69]">
@@ -67,14 +68,13 @@
 
         <div class="text-center text-gray-500 mb-6">
             <span>Hết hạn sau: 04:55 (Chỉnh sau)</span><br>
-            <a [routerLink]="['/otp-verification']" class="text-[#BD9F69] hover:underline font-semibold">
+            <a (click)="requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
                 Không nhận được mã? Gửi lại
             </a>
         </div>
 
-        <button
-            (click)="sendOtp()"
-            class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 mb-6 shadow hover:shadow-lg">
+        <button (click)="sendOtp()"
+            class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 mb-6 shadow hover:shadow-lg cursor-pointer">
             Xác nhận
         </button>
         }
