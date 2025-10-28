@@ -32,7 +32,7 @@ export class AuthService {
      */
     requestOtp(payload: requestOtpRequest): Observable<any> {
         console.log("Request Payload:", payload);
-        // return of(true);
+        return of(true);
         return this.http.post(this.requestUrl, payload).pipe(
             catchError((error) => {
                 console.error('Request OTP failed:', error);
@@ -47,7 +47,7 @@ export class AuthService {
      * @returns Observable<any> - Emits API verification result or an error.
      */
     verifyOtp(payload: verifyOtpRequest): Observable<any> {
-        console.log("Verify Payload:", payload);
+        // console.log("Verify Payload:", payload);
         return of(true);
         return this.http.post(this.verifyUrl, payload).pipe(
             catchError((error) => {
@@ -84,7 +84,7 @@ export class AuthService {
     };
 
     resetPassword(payload: any): Observable<any> {
-        console.log("Reset Payload:", payload);
+        // console.log("Reset Payload:", payload);
         return of(true);
         return this.http.post(this.resetPasswordUrl, payload).pipe(
 

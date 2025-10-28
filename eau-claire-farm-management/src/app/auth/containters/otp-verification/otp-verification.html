@@ -1,94 +1,89 @@
 <app-loading
-    [message]="'Đang tải...'"
+    [message]="'Đang tải'"
     [isShow]="isLoading()"
 ></app-loading>
 <app-auth-layout>
-    <div>
-        @if (!isOtpSent()) {
-        <h2 class="text-3xl font-bold text-center mb-2">
+    <div class="px-21 sm:px-5 md:px-0">
+        <!-- @if (!isOtpSent()) { -->
+        <h2 class="text-5xl font-bold text-center mb-5">
             Quên mật khẩu
         </h2>
-
-        <p class="text-center text-gray-500 mb-8">
-            Vui lòng nhập {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }} của bạn để nhận mã xác thực.
-        </p>
 
         <!-- Form nhập email -->
         <form (ngSubmit)="requestOtp()">
-            <div class="mb-2">
-                <label for="email-otp" class="block text-sm font-medium text-gray-600 mb-2">
-                    Gửi mã qua {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}
-                </label>
-                <div class="relative">
-                    <input [formControl]="requestFormControl" [type]="otpPayload.method === 'email' ? 'email' : 'tel'"
-                        id="otp" placeholder="Nhập {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}"
-                        class="w-full px-4 py-3 border border-[#BD9F69] rounded-lg focus:ring-1 focus:ring-[#BD9F69] focus:border-[#BD9F69] outline-none transition" />
-                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-[#BD9F69]" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </span>
-                </div>
+            <div class="">
+                <app-primary-forms-input 
+                    [formControl]="requestForm" 
+                    [id]="'text'" 
+                    [label]="'Gửi mã qua '+ (otpPayload.method === 'email' ? 'Email' : 'SMS')" 
+                    [type]="'text'"
+                    [extraClass]="'bg-[#BD9F69] mt-2 rounded-[13px] w-full  h-12 sm:h-15 pl-4 sm:pl-6 text-white placeholder-[#FFFFFF]/60'"
+                    [showIconSlot]="true"
+                    placeholder="Nhập mật khẩu">
+                </app-primary-forms-input>
             </div>
 
-            <button type="submit"
-                class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-[#A1834F] transition-all duration-300 mt-4 mb-6 shadow hover:shadow-lg">
-                Gửi mã xác nhận
-            </button>
+            @if (!isOtpSent()) {
+                <button type="submit"
+                    class="w-full h-12 sm:h-15 text-sm sm:text-base text-black border border-[#BD9F69] py-3 rounded-[15px] hover:bg-[#BD9F69]/20 transition-all duration-300 mt-2 mb-6 shadow hover:shadow-lg">
+                    Gửi mã xác nhận
+                </button>
+            }
         </form>
+        
+        <div>
+            @if (isOtpSent()) {
+                <div class="flex justify-center gap-4 mt-5 mb-2">
+                    <app-otp-input
+                        #otpInput
+                        [extraInputClass]="'w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 text-center text-xl sm:text-2xl font-bold border-1 border-[#BD9F69] rounded-[13px] focus:border-[#BD9F69] focus:ring-1 focus:ring-[#BD9F69] outline-none transition'"
+                        [extraContainerClass]="'gap-2 sm:gap-3 md:gap-4'"
+                        [otpLength]=6
+                        [isDisabled]="isOtpTimeout()"
+                        (otpComplete)="verifyOtp()"
+                        >
+                    </app-otp-input>
+                </div>
 
-        } @else {
-        <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">
-            Quên mật khẩu
-        </h2>
-        <p class="text-center text-gray-500 mb-2">
-            Gửi mã OTP qua {{ otpPayload.method === 'email' ? 'Email' : 'số diện thoại' }}
-        </p>
+                <div class="text-center text-black mb-3 text-sm sm:text-base">
+                    <div class="flex items-center justify-center">
+                        <span class=" mr-1">Hết hạn sau:</span>
+                        <span class="text-[#A1834F]">{{ formatTime(otpTime()) }}</span>
+                    </div>
 
-        <div class="text-center bg-[#EEEDED] p-3 rounded-lg mx-auto mb-6 w-50 relative border border-[#BD9F69]">
-            <span class="text-black">{{ otpPayload.email || otpPayload.phone }}</span>
-            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-[#BD9F69]" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-            </span>
-        </div>
+                    <div>
+                        <span class="">Không nhận được mã?</span>
+                        <span (click)="requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
+                            Gửi lại
+                        </span>
+                    </div>
+                </div>
 
-        <div class="flex justify-center gap-2 mb-4">
-            @for (digit of otp; track $index) {
-            <input type="text" [id]="'otp-' + $index" maxlength="1" (input)="onOtpInput($event, $index)"
-                (keydown)="onOtpKeyDown($event, $index)"
-                class="otp-input w-12 h-14 text-center text-2xl font-bold border-1 border-gray-300 rounded-lg focus:border-[#BD9F69] focus:ring-1 focus:ring-[#BD9F69] outline-none transition" />
+                <div class="justify-center flex mt-4 mb-4 sm:mt-5 sm:mb-5">
+                    <app-button
+                        (click)="!isOtpTimeout() && verifyOtp()"
+                        [buttonText]="'Xác nhận'"
+                        [extraClass]="'border-1 border-[#BD9F69] rounded-[15px] w-52 sm:w-72 md:w-96 lg:w-104 h-14 text-base'"
+                        >
+                    </app-button>
+                </div>
             }
         </div>
 
-        <div class="text-center text-gray-500 mb-6">
-            <span>Hết hạn sau: 04:55 (Chỉnh sau)</span><br>
-            <a (click)="requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
-                Không nhận được mã? Gửi lại
-            </a>
-        </div>
-
-        <button (click)="sendOtp()"
-            class="w-full bg-[#BD9F69] text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 mb-6 shadow hover:shadow-lg cursor-pointer">
-            Xác nhận
-        </button>
-        }
-
         <div class="text-center">
-            <a (click)="isOtpSent() ? goBackToEmailInput() : null" [routerLink]="!isOtpSent() ? ['/login'] : null"
-                class="text-[16px] text-[#BD9F69] hover:underline cursor-pointer font-semibold inline-flex items-center">
+            <a [routerLink]="['/forgot-password']"
+                class="text-sm sm:text-base text-black hover:underline cursor-pointer inline-flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Quay lại
+
+                <span>
+                    Quay lại
+                </span>
             </a>
         </div>
+
     </div>
 </app-auth-layout>

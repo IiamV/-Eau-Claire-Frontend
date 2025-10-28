@@ -1,5 +1,5 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-primary-forms-input',
@@ -17,10 +17,12 @@ import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@a
   ]
 })
 export class FormsInput {
+  @Input() showIconSlot: boolean = false;
   @Input() id: string = '';
   @Input() label: string = '';
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
+  @Input() extraClass: string = '';
 
   // Value bound to the form control
   value: string = '';

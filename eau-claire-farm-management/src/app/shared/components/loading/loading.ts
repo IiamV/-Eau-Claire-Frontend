@@ -6,6 +6,6 @@ import { Component, Input, input } from '@angular/core';
   styleUrls: ['./loading.css']
 })
 export class LoadingComponent {
-  @Input() message: string = 'Đang tải...';
+  @Input() message: string = 'Đang tải';
   @Input() isShow: boolean = false;
 }

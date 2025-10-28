@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 //import { AuthService } from '../../core/services/auth.service';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
 import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
@@ -49,10 +49,6 @@ export class Login {
     );
   }
 
-  closePopup() {
-    this.isPopupOpen.set(false);
-  }
-
   redirecToForgotPassword() {
     let method = this.loginForm.get('username')?.value.includes('@') ? 'email' : 'sms';
 
@@ -64,10 +60,20 @@ export class Login {
   }
 
   onLoginSubmit() {
+    this.errorMessage = '';
     // Validate form before proceeding
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      console.log("Invalid form:", this.loginForm.value);
+      let passwordInput = this.loginForm.get('password');
+      if (passwordInput?.hasError('required')) {
+        this.errorMessage = 'Vui lòng nhập mật khẩu.'
+      }
+
+      let userInput = this.loginForm.get('username');
+      if (userInput?.hasError('required')) {
+        this.errorMessage = 'Vui lòng nhập tên đăng nhập.'
+      }
+
+      // this.errorMessage='Invalid Input'
       return;
     }
 
@@ -99,7 +105,7 @@ export class Login {
             console.log("Internal server error");
             break;
         }
-        console.log("Details:", error);
+        console.error("Details:", error);
         this.isLoading.set(false);
       }
     });

@@ -7,5 +7,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './button.css'
 })
 export class Button {
-  @Input() type: string = '';
+  @Input() buttonText: string = '';
+  @Input() buttonType: string = 'submit';
+  @Input() extraClass: string = '';
 }

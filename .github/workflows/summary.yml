@@ -2,7 +2,11 @@ name: Summarize new issues
 
 on:
   issues:
+<<<<<<< HEAD
     types: [opened]
+=======
+    types: [opened, reopened, labeled]
+>>>>>>> 6816723fc3fb586e52310f432d7db0fd94fb6caf
 
 jobs:
   summary:

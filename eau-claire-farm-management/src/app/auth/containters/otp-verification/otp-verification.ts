@@ -1,21 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component, EventEmitter, Output, signal, ViewChild } from '@angular/core';
 import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
 import { RouterLink, ActivatedRoute } from "@angular/router";
-import { FormControl, Validators, FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, Validators, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
 import { DeviceFingerprintService } from '../../services/device.service';
+import { FormsInput } from '../../ui-components/primary-forms-input/primary-forms-input';
 import { LoadingComponent } from "../../../shared/components/loading/loading";
+import { Button } from "../../ui-components/button/button";
+import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
 
 @Component({
   selector: 'app-otp-verification',
-  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule, LoadingComponent],
+  standalone: true,
+  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule, LoadingComponent, FormsInput, Button, OtpInputComponent],
   templateUrl: './otp-verification.html',
   styleUrl: './otp-verification.css'
 })
 
 export class OtpVerification {
+  @ViewChild(OtpInputComponent) otpComponent!: OtpInputComponent;
 
   /**
    * Signal used to manage OTP sent status.
@@ -24,28 +28,30 @@ export class OtpVerification {
    */
   isOtpSent = signal(false);
   isLoading = signal(false);
+  isOtpTimeout = signal(false);
+  isOtpActive = signal(false);
+  // otpTime = signal(5 * 60);
+  otpTime = signal(5 * 60);
+  remainingTime = this.otpTime;
+  intervalId: any= null;
 
   // FormControl for email or phone input
-  requestFormControl = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
+  requestForm = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
 
   // Payload object to send OTP request or verification
-  otpPayload: requestOtpRequest | verifyOtpRequest = {
+  otpPayload: requestOtpRequest = {
     method: null,
     userId: 0,
     deviceId: '',
     phone: '',
     email: '',
-    inputOtp: '',
     purpose: "login"
   };
-
-  // Mảng để lưu trữ các giá trị của ô OTP
-  otp: string[] = new Array(6).fill('');
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
-    private deviceService: DeviceFingerprintService
+    private deviceService: DeviceFingerprintService,
   ) {
     // Subscribe to query parameters to get verification method (email/phone)
     this.route.queryParams.subscribe(params => {
@@ -62,10 +68,9 @@ export class OtpVerification {
    * Triggered when the user clicks "Send OTP".
    * Validates OTP length and calls verifyOtp API.
    */
-  sendOtp(): void {
-    let currentOtp = this.otp.join('');
+  verifyOtp(): void {
     // Validate OTP
-    if (currentOtp.length < 6) {
+    if (this.otpComponent.getValue().length !== 6) {
       console.log("Invalid OTP");
       return;
     }
@@ -73,25 +78,19 @@ export class OtpVerification {
     this.isLoading.set(true);
 
     // Update payload with entered OTP
-    this.otpPayload = {
+    let verifyPayload: verifyOtpRequest = {
       ...this.otpPayload,
-      inputOtp: currentOtp
+      inputOtp: this.otpComponent.getValue()
     };
-    console.log("Current Payload:", this.otpPayload);
 
     // Call API to verify OTP
-    this.authService.verifyOtp(this.otpPayload).subscribe({
+    this.authService.verifyOtp(verifyPayload).subscribe({
       next: (response) => {
         console.log("Request OTP Success:", response);
-        this.isOtpSent.set(true);
-        this.isLoading.set(true);
-      },
-      error: (error) => {
-        console.log("Request OTP Failed:", error);
-        this.isOtpSent.set(false);
         this.isLoading.set(false);
       },
-      complete: () => {
+      error: (error) => {
+        console.error("Details: ", error);
         this.isLoading.set(false);
       }
     });
@@ -103,12 +102,12 @@ export class OtpVerification {
    */
   requestOtp(): void {
     // Validate input
-    if (!this.requestFormControl.value) {
+    if (!this.requestForm.value) {
       console.log("No email or phone number provided.");
       return;
     }
 
-    if (this.requestFormControl.invalid) {
+    if (this.requestForm.invalid) {
       console.log("Invalid email or phone number.");
       return;
     }
@@ -118,78 +117,73 @@ export class OtpVerification {
     // Prepare payload based on verification method
     this.otpPayload = {
       ...this.otpPayload,
-      email: this.otpPayload.method === 'email' ? this.requestFormControl.value : '',
-      phone: this.otpPayload.method === 'sms' ? this.requestFormControl.value : ''
+      email: this.otpPayload.method === 'email' ? this.requestForm.value : '',
+      phone: this.otpPayload.method === 'sms' ? this.requestForm.value : ''
     };
 
     // Call API to request OTP
     this.authService.requestOtp(this.otpPayload).subscribe({
       next: (response) => {
-        console.log("Request OTP Success:", response);
+        console.log("Request Response:", response);
+        this.isLoading.set(false);
         this.isOtpSent.set(true);
+        this.startOtpTimeout();
       },
       error: (error) => {
-        console.log("Request OTP Failed:", error);
+        console.error("Request Details: ", error);
         this.isOtpSent.set(false);
-      },
-      complete: () => {
         this.isLoading.set(false);
-        console.log("Request OTP Completed");
       }
     });
   }
 
-  /**
-   * Hàm này được gọi khi người dùng nhấn "Quay lại" từ màn hình nhập OTP
-   * để quay về màn hình nhập email.
-   */
-  goBackToEmailInput() {
-    this.isOtpSent.set(false);
+  emailOrPhoneValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      
+      if (!value) {
+        return null;
+      }
+
+      // Email regex pattern
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Phone regex pattern (adjust based on your requirements)
+      const phonePattern = /^[\d\s\-\+\(\)]+$/;
+
+      const isValidEmail = emailPattern.test(value);
+      const isValidPhone = phonePattern.test(value) && value.replace(/\D/g, '').length >= 10;
+
+      if (isValidEmail || isValidPhone) {
+        return null; // Valid
+      }
+
+      return { emailOrPhone: true }; // Invalid
+    };
   }
 
-  /**
-   * Xử lý sự kiện khi người dùng nhập liệu vào ô OTP.
-   * Tự động di chuyển focus đến ô tiếp theo.
-   * @param event - Sự kiện bàn phím
-   * @param index - Vị trí của ô input hiện tại
-   */
+  startOtpTimeout(): void {
+    this.isOtpActive.set(true);
+    this.isOtpTimeout.set(false);
+    this.otpTime.set(5 * 60);
 
-  onOtpInput(event: any, index: number) {
-    const input = event.target as HTMLInputElement;
-    let value = input.value;
-
-    // Chir cho phép lấy ký tự số
-    if (value && !/^\d*$/.test(value)) {
-      input.value = value.replace(/[^\d]/g, '');
-    }
-    value = input.value;
-    this.otp[index] = value;
-
-    if (value.length > 1) {
-      input.value = value.slice(0, 1);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
 
-    // Tuwj động focus vào ô tiếp theo nếu đã nhập thành công
-    if (value && index < 5) {
-      const nextInput = document.getElementById('otp-' + (index + 1));
-      if (nextInput) {
-        nextInput.focus();
+    this.intervalId = setInterval(() => {
+      this.otpTime.update(time => time - 1);
+      
+      if (this.otpTime() <= 0) {
+        this.isOtpActive.set(false);
+        this.isOtpTimeout.set(true);
+        clearInterval(this.intervalId);
       }
-    }
+    }, 1000);
   }
 
-  /**
-   * Xử lý sự kiện nhấn phím Backspace.
-   * Di chuyển focus về ô phía trước nếu ô hiện tại trống.
-   * @param event - Sự kiện bàn phím
-   * @param index - Vị trí của ô input hiện tại
-   */
-  onOtpKeyDown(event: KeyboardEvent, index: number) {
-    if (event.key == 'Backspace' && index > 0 && !this.otp[index]) {
-      const prevInput = document.getElementById('otp-' + (index - 1));
-      if (prevInput) {
-        prevInput.focus()
-      }
-    }
+  formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 }
