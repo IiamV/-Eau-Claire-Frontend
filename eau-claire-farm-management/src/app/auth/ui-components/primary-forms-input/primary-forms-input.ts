@@ -17,7 +17,7 @@ import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, FormContr
   ]
 })
 export class FormsInput {
-  @Input() showIconSlot: boolean = false;
+  @Input() showIcon: boolean = false;
   @Input() id: string = '';
   @Input() label: string = '';
   @Input() type: string = 'text';

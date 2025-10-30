@@ -9,10 +9,11 @@ import { loginRequest } from '../../../models/auth/login';
 import { AuthService } from '../../services/auth.service';
 import { DeviceFingerprintService } from '../../services/device.service';
 import { LoadingComponent } from "../../../shared/components/loading/loading";
+import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule, AuthLayout, FormsInput, Button, LoadingComponent],
+  imports: [RouterLink, ReactiveFormsModule, AuthLayout, FormsInput, Button, LoadingComponent, StatusPopupComponent],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -21,7 +22,7 @@ export class Login {
   deviceId: string = '';
   isLoading = signal(false);
   errorMessage = '';
-  isPopupOpen = signal(true);
+  isPopupOpen = signal(false);
 
   loginForm!: FormGroup;
 
@@ -59,6 +60,10 @@ export class Login {
     });
   }
 
+  handleClose(): void {
+    this.isPopupOpen.set(false);
+  }
+
   onLoginSubmit() {
     this.errorMessage = '';
     // Validate form before proceeding
@@ -91,12 +96,10 @@ export class Login {
         // this.router.navigate(['/home']);
       },
       error: (error) => {
-        this.errorMessage = error.message;
+        this.errorMessage = "Request Failure.";
         switch (error.status) {
           case 401:
             console.log("Unauthorized - Invalid credentials");
-            // this.router.navigate(['/forgot-password', ]);
-            // this.redirecToForgotPassword();
             break;
           case 409:
             console.log("Device is not verified");

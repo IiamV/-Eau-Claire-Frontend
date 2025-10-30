@@ -18,8 +18,8 @@
                     [label]="'Gửi mã qua '+ (otpPayload.method === 'email' ? 'Email' : 'SMS')" 
                     [type]="'text'"
                     [extraClass]="'bg-[#BD9F69] mt-2 rounded-[13px] w-full  h-12 sm:h-15 pl-4 sm:pl-6 text-white placeholder-[#FFFFFF]/60'"
-                    [showIconSlot]="true"
-                    placeholder="Nhập mật khẩu">
+                    [showIcon]="true"
+                    [placeholder]="otpPayload.method === 'email' ? 'Nhập email' : 'Nhập số điện thoại'">
                 </app-primary-forms-input>
             </div>
 

@@ -2,6 +2,15 @@
     [isShow]="isLoading()"
     [message]="'Đang tải'">
 </app-loading>
+<app-status-popup
+    [isOpen]="isPopupOpen()"
+    [isSuccess]="false"
+    [buttonText]="'Xác minh thiết bị bằng OTP'"
+    [title]="'Chưa xác minh'"
+    [message]="'Cần phải xác minh thiết bị'"
+    (close)="handleClose()"
+    (buttonClick)="redirecToForgotPassword()">
+</app-status-popup>
 <!-- 
 <app-splash-animation>
 

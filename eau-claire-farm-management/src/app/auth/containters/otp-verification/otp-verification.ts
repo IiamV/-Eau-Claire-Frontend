@@ -40,12 +40,11 @@ export class OtpVerification {
 
   // Payload object to send OTP request or verification
   otpPayload: requestOtpRequest = {
-    method: null,
-    userId: 0,
+    method: '',
+    userId: 3,
     deviceId: '',
     phone: '',
-    email: '',
-    purpose: "login"
+    email: ''
   };
 
   constructor(
@@ -80,6 +79,7 @@ export class OtpVerification {
     // Update payload with entered OTP
     let verifyPayload: verifyOtpRequest = {
       ...this.otpPayload,
+      purpose: 'generic',
       inputOtp: this.otpComponent.getValue()
     };
 

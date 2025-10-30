@@ -1,10 +1,9 @@
 export interface requestOtpRequest {
-    method: 'email' | 'sms' | null,
+    method: 'email' | 'sms' | '',
     userId: number,
     deviceId: string,
     phone: string,
-    email: string,
-    purpose: string
+    email: string
 }
 
 export interface requestOtpResponse {
@@ -14,7 +13,7 @@ export interface requestOtpResponse {
 }
 
 export interface verifyOtpRequest {
-    method: 'email' | 'sms' | null,
+    method: 'email' | 'sms' | '',
     userId: number,
     deviceId: string,
     phone: string,
