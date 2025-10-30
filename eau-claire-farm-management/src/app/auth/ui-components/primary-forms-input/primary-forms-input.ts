@@ -23,6 +23,7 @@ export class FormsInput {
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() extraClass: string = '';
+  @Input() icon: string = '';
 
   // Value bound to the form control
   value: string = '';
