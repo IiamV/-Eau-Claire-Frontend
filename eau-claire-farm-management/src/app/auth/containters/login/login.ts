@@ -100,6 +100,7 @@ export class Login {
         switch (error.status) {
           case 401:
             console.log("Unauthorized - Invalid credentials");
+            this.isPopupOpen.set(true);
             break;
           case 409:
             console.log("Device is not verified");
