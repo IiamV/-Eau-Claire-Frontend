@@ -1,4 +1,5 @@
-<button [type]="type"
-    class="flex items-center w-full bg-[#BD9F69] text-white p-2 rounded-md hover:bg-[#A1834F] transition-colors">
+<button [type]="buttonType" 
+    [class]=" 'p-2 transition-colors cursor-pointer '+extraClass">
+    {{ buttonText }}
     <ng-content></ng-content>
 </button>

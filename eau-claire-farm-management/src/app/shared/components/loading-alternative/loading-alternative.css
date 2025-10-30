@@ -1,0 +1,309 @@
+/* splash-animation.component.css */
+
+/* Fish swimming animation - swims up from bottom, dives back down */
+.fish-container {
+  animation: fishSwim 4s ease-in-out infinite;
+}
+
+@keyframes fishSwim {
+  0% {
+    transform: translateY(200px) translateX(0) rotate(90deg) scale(0.8);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(100px) translateX(0) rotate(45deg) scale(0.9);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(-30px) translateX(5px) rotate(-15deg) scale(1);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(-20px) translateX(-5px) rotate(5deg) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(100px) translateX(0) rotate(45deg) scale(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(200px) translateX(0) rotate(90deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Splash container pulse */
+.splash-container {
+  animation: splashAppear 4s ease-in-out infinite;
+}
+
+@keyframes splashAppear {
+  0%, 25%, 75%, 100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  30%, 70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Ripple base animation */
+.ripple-base {
+  animation: rippleExpand 4s ease-out infinite;
+  transform-origin: center;
+}
+
+@keyframes rippleExpand {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.6) scaleY(1);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1) scaleY(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2) scaleY(0.8);
+  }
+  75% {
+    opacity: 0.3;
+    transform: scale(1.5) scaleY(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8) scaleY(0.4);
+  }
+}
+
+/* Center column animation */
+.center-column {
+  animation: columnRise 4s ease-out infinite;
+  transform-origin: center bottom;
+}
+
+.center-top {
+  animation: topBulge 4s ease-out infinite;
+  transform-origin: center;
+}
+
+@keyframes columnRise {
+  0%, 100% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.1);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scaleY(0.3);
+  }
+}
+
+@keyframes topBulge {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+  75% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Side splashes - left */
+.splash-left-1, .splash-left-1-top {
+  animation: splashSideLeft1 4s ease-out infinite;
+}
+
+.splash-left-2, .splash-left-2-top {
+  animation: splashSideLeft2 4s ease-out infinite;
+}
+
+@keyframes splashSideLeft1 {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.1);
+  }
+  75% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+}
+
+@keyframes splashSideLeft2 {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0);
+  }
+  32% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  52% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.1);
+  }
+  75% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.5);
+  }
+}
+
+/* Side splashes - right */
+.splash-right-1, .splash-right-1-top {
+  animation: splashSideRight1 4s ease-out infinite;
+}
+
+.splash-right-2, .splash-right-2-top {
+  animation: splashSideRight2 4s ease-out infinite;
+}
+
+@keyframes splashSideRight1 {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.1);
+  }
+  75% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+}
+
+@keyframes splashSideRight2 {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0);
+  }
+  32% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  52% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.1);
+  }
+  75% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.5);
+  }
+}
+
+/* Droplets animation */
+.droplet {
+  animation: dropletFly 4s ease-out infinite;
+}
+
+.droplet-1 { animation-delay: 0.1s; }
+.droplet-2 { animation-delay: 0.12s; }
+.droplet-3 { animation-delay: 0.15s; }
+.droplet-4 { animation-delay: 0.15s; }
+.droplet-5 { animation-delay: 0.08s; }
+.droplet-6 { animation-delay: 0.08s; }
+.droplet-7 { animation-delay: 0.13s; }
+.droplet-8 { animation-delay: 0.13s; }
+
+@keyframes dropletFly {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(-15px) scale(1);
+  }
+  65% {
+    opacity: 0.5;
+    transform: translateY(-35px) scale(0.6);
+  }
+  80% {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.2);
+  }
+}
+
+/* Spray droplets */
+.spray {
+  animation: sprayFloat 4s ease-out infinite;
+}
+
+.spray-1 { animation-delay: 0.15s; }
+.spray-2 { animation-delay: 0.17s; }
+.spray-3 { animation-delay: 0.18s; }
+.spray-4 { animation-delay: 0.18s; }
+.spray-5 { animation-delay: 0.2s; }
+.spray-6 { animation-delay: 0.2s; }
+
+@keyframes sprayFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(5px) scale(0);
+  }
+  35% {
+    opacity: 0.8;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-20px) scale(0.8);
+  }
+  70% {
+    opacity: 0.3;
+    transform: translateY(-45px) scale(0.4);
+  }
+  85% {
+    opacity: 0;
+    transform: translateY(-65px) scale(0.1);
+  }
+}

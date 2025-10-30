@@ -1,0 +1,72 @@
+<!-- splash-animation.component.html -->
+<div class="relative w-full h-screen overflow-hidden" [ngClass]="bgColor">
+  <!-- Water Splash -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div class="splash-container">
+      <svg class="w-96 h-96" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Water ripple/base -->
+        <ellipse cx="200" cy="230" rx="120" ry="20" fill="white" opacity="0.9" class="ripple-base"/>
+        
+        <!-- Main central column -->
+        <ellipse cx="200" cy="180" rx="8" ry="60" fill="white" class="center-column"/>
+        <circle cx="200" cy="145" r="12" fill="white" class="center-top"/>
+        
+        <!-- Left side splashes -->
+        <!-- Large left splash -->
+        <ellipse cx="160" cy="200" rx="18" ry="25" fill="white" class="splash-left-1"/>
+        <circle cx="160" cy="185" r="10" fill="white" class="splash-left-1-top"/>
+        
+        <!-- Medium left splash -->
+        <ellipse cx="145" cy="210" rx="10" ry="18" fill="white" class="splash-left-2"/>
+        <circle cx="145" cy="200" r="7" fill="white" class="splash-left-2-top"/>
+        
+        <!-- Right side splashes -->
+        <!-- Large right splash -->
+        <ellipse cx="240" cy="200" rx="18" ry="25" fill="white" class="splash-right-1"/>
+        <circle cx="240" cy="185" r="10" fill="white" class="splash-right-1-top"/>
+        
+        <!-- Medium right splash -->
+        <ellipse cx="255" cy="210" rx="10" ry="18" fill="white" class="splash-right-2"/>
+        <circle cx="255" cy="200" r="7" fill="white" class="splash-right-2-top"/>
+        
+        <!-- Small droplets scattered around -->
+        <circle cx="180" cy="170" r="4" fill="white" class="droplet droplet-1"/>
+        <circle cx="220" cy="170" r="4" fill="white" class="droplet droplet-2"/>
+        <circle cx="125" cy="195" r="3" fill="white" class="droplet droplet-3"/>
+        <circle cx="275" cy="195" r="3" fill="white" class="droplet droplet-4"/>
+        <circle cx="190" cy="155" r="3" fill="white" class="droplet droplet-5"/>
+        <circle cx="210" cy="155" r="3" fill="white" class="droplet droplet-6"/>
+        <circle cx="265" cy="180" r="3" fill="white" class="droplet droplet-7"/>
+        <circle cx="135" cy="180" r="3" fill="white" class="droplet droplet-8"/>
+        
+        <!-- Tiny spray droplets -->
+        <circle cx="170" cy="160" r="2" fill="white" opacity="0.8" class="spray spray-1"/>
+        <circle cx="230" cy="160" r="2" fill="white" opacity="0.8" class="spray spray-2"/>
+        <circle cx="155" cy="175" r="2" fill="white" opacity="0.8" class="spray spray-3"/>
+        <circle cx="245" cy="175" r="2" fill="white" opacity="0.8" class="spray spray-4"/>
+        <circle cx="120" cy="185" r="2" fill="white" opacity="0.8" class="spray spray-5"/>
+        <circle cx="280" cy="185" r="2" fill="white" opacity="0.8" class="spray spray-6"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Swimming Fish -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div class="fish-container">
+      <svg class="w-20 h-20" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fish body -->
+        <ellipse cx="45" cy="30" rx="25" ry="15" fill="white" opacity="0.95"/>
+        
+        <!-- Fish tail -->
+        <path d="M 20 30 Q 10 25 5 20 Q 10 30 5 40 Q 10 35 20 30 Z" fill="white" opacity="0.95"/>
+        
+        <!-- Fish eye -->
+        <circle cx="60" cy="27" r="3" fill="#0891b2"/>
+        
+        <!-- Fish fins -->
+        <path d="M 45 40 Q 42 50 45 55 Q 47 50 45 40 Z" fill="white" opacity="0.8"/>
+        <path d="M 45 20 Q 42 10 45 5 Q 47 10 45 20 Z" fill="white" opacity="0.8"/>
+      </svg>
+    </div>
+  </div>
+</div>

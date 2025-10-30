@@ -34,6 +34,7 @@
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.5",
+    "@fingerprintjs/fingerprintjs": "^4.6.2",
     "axios": "^1.12.2",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
