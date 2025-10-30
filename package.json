@@ -24,7 +24,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cli": "^20.3.5",
     "@angular/cdk": "^20.2.8",
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
@@ -35,7 +34,7 @@
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.5",
-    "@fingerprintjs/fingerprintjs": "^5.0.1",
+    "@fingerprintjs/fingerprintjs": "^4.6.2",
     "axios": "^1.12.2",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
@@ -43,6 +42,7 @@
   },
   "devDependencies": {
     "@angular/build": "^20.3.5",
+    "@angular/cli": "^20.3.5",
     "@angular/compiler-cli": "^20.3.0",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/express": "^5.0.1",
