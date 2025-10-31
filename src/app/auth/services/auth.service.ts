@@ -12,7 +12,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 
 export class AuthService {
     // Base URL for all authentication-related API calls
-    private baseUrl = environment.baseUrl
+    private baseUrl = environment.apiUrl
     private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
     private requestUrl = `${this.baseUrl}/sys/request-otp`;
     private tokenUrl = `${this.baseUrl}/sys/token`;
@@ -25,7 +25,7 @@ export class AuthService {
      */
     constructor(private http: HttpClient) {
         console.log("Current API URL: ", this.baseUrl);
-     }
+    }
 
     /**
      * Sends a request to generate and send an OTP to the user.

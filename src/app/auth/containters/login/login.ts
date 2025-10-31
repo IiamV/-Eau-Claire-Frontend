@@ -48,21 +48,21 @@ export class Login {
         }
       }
     );
-  }
+  };
 
   redirecToForgotPassword() {
-    let method = this.loginForm.get('username')?.value.includes('@') ? 'email' : 'sms';
+    let method: string = this.loginForm.get('username')?.value.includes('@') ? 'email' : 'sms';
 
     this.router.navigate(['/otp-verification'], {
       queryParams: {
         verifyMethod: method
       }
     });
-  }
+  };
 
   handleClose(): void {
     this.isPopupOpen.set(false);
-  }
+  };
 
   onLoginSubmit() {
     this.errorMessage = '';
@@ -70,17 +70,17 @@ export class Login {
     if (this.loginForm.invalid) {
       let passwordInput = this.loginForm.get('password');
       if (passwordInput?.hasError('required')) {
-        this.errorMessage = 'Vui lòng nhập mật khẩu.'
-      }
+        this.errorMessage = 'Vui lòng nhập mật khẩu.';
+      };
 
       let userInput = this.loginForm.get('username');
       if (userInput?.hasError('required')) {
-        this.errorMessage = 'Vui lòng nhập tên đăng nhập.'
-      }
+        this.errorMessage = 'Vui lòng nhập tên đăng nhập.';
+      };
 
       // this.errorMessage='Invalid Input'
       return;
-    }
+    };
 
     this.isLoading.set(true);
     let loginPayload: loginRequest = {
@@ -93,7 +93,6 @@ export class Login {
       next: (response) => {
         console.log("Login success:", response);
         this.isLoading.set(false);
-        // this.router.navigate(['/home']);
       },
       error: (error) => {
         this.errorMessage = "Request Failure.";
@@ -104,7 +103,7 @@ export class Login {
               this.isPopupOpen.set(true);
             }
             else {
-              this.errorMessage=error.error.message
+              this.errorMessage=error.error.message;
             }
             break;
           case 409:

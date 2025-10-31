@@ -30,7 +30,6 @@ export class OtpVerification {
   isLoading = signal(false);
   isOtpTimeout = signal(false);
   isOtpActive = signal(false);
-  // otpTime = signal(5 * 60);
   otpTime = signal(5 * 60);
   remainingTime = this.otpTime;
   intervalId: any= null;
@@ -54,13 +53,13 @@ export class OtpVerification {
   ) {
     // Subscribe to query parameters to get verification method (email/phone)
     this.route.queryParams.subscribe(params => {
-      this.otpPayload.method = params['verifyMethod']
+      this.otpPayload.method = params['verifyMethod'];
     }),
-      this.deviceService.getDeviceId().then((id) => {
-        if (id) {
-          this.otpPayload.deviceId = id;
-        }
-      })
+    this.deviceService.getDeviceId().then((id) => {
+      if (id) {
+        this.otpPayload.deviceId = id;
+      };
+    })
   }
 
   /**
