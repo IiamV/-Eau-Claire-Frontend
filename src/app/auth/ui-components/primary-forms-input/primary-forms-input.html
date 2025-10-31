@@ -1,0 +1,23 @@
+<div class="space-y-1 py-2">
+    <label [for]="id" class="block font-medium text-[14px] text-black">
+        {{ label }}
+    </label>
+    <div class="relative flex justify-center w-full">
+        <input 
+        [type]="type" 
+        [placeholder]="placeholder" 
+        [value]="value"
+        [disabled]="disabled"
+        (input)="onInputChange($event)"
+        (blur)="onBlur()"
+        [class]="'mt-0 pl-3 text-sm border border-[#BD9F69] focus:outline-none focus:ring-1 focus:ring-[#A1834F] '+extraClass">
+
+        @if (showIcon) {
+            <div class="absolute inset-y-8 sm:inset-y-9.5 right-7 flex items-center">
+                <svg width="30" height="30" viewBox="0 0 27 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path [attr.d]="icon" fill="white"/>
+                </svg>
+            </div>
+        }
+    </div>
+</div>

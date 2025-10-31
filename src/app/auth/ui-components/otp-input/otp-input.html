@@ -1,0 +1,18 @@
+    <div [class]="'flex justify-center '+extraContainerClass">
+    @for (digit of otp; track $index) {
+        <input 
+        #otpInput
+        type="text" 
+        inputmode="numeric"
+        pattern="\d*"
+        [value]="digit"
+        maxlength="1" 
+        autocomplete="one-time-code"
+        (input)="onOtpInput($event, $index)"
+        (keydown)="onOtpKeyDown($event, $index)"
+        [class]="extraInputClass"
+        (paste)="onPaste($event, $index)"
+        [disabled]="isDisabled"
+        />
+    }
+    </div>
