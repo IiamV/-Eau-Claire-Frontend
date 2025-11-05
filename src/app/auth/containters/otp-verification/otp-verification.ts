@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, signal, ViewChild } from '@angular/core';
-import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
+import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
 import { RouterLink, ActivatedRoute } from "@angular/router";
 import { ReactiveFormsModule, Validators, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -30,13 +30,13 @@ export class OtpVerification {
   isLoading = signal(false);
   isOtpTimeout = signal(false);
   isOtpActive = signal(false);
-  // otpTime = signal(5 * 60);
   otpTime = signal(5 * 60);
   remainingTime = this.otpTime;
   intervalId: any= null;
+  errorMessage: string = '';
 
   // FormControl for email or phone input
-  requestForm = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9@.+]+$')]);
+  requestForm = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\.?[0-9]{10,15}$')]);
 
   // Payload object to send OTP request or verification
   otpPayload: requestOtpRequest = {
@@ -58,7 +58,8 @@ export class OtpVerification {
     }),
       this.deviceService.getDeviceId().then((id) => {
         if (id) {
-          this.otpPayload.deviceId = id;
+          // this.otpPayload.deviceId = id;
+          this.otpPayload.deviceId = '123';
         }
       })
   }
@@ -102,13 +103,24 @@ export class OtpVerification {
    */
   requestOtp(): void {
     // Validate input
-    if (!this.requestForm.value) {
-      console.log("No email or phone number provided.");
-      return;
-    }
+    if (this.requestForm.invalid || !this.requestForm.value) {
+      let userInfo = this.requestForm.value;
+      if (userInfo === '') {
+        if (this.otpPayload.method === 'email') {
+          this.errorMessage = 'Vui lòng nhập địa chỉ Email.';
+        } else {
+          this.errorMessage = 'Vui lòng nhập số điện thoại.';
+        }
+      }
 
-    if (this.requestForm.invalid) {
-      console.log("Invalid email or phone number.");
+      if (this.requestForm.hasError('pattern')) {
+        if (this.otpPayload.method === 'email') {
+          this.errorMessage = 'Sai định dạng địa chỉ email.';
+        } else {
+          this.errorMessage = 'Sai định dạng số điện thoại.';
+        }
+      }
+
       return;
     }
 
@@ -135,30 +147,6 @@ export class OtpVerification {
         this.isLoading.set(false);
       }
     });
-  }
-
-  emailOrPhoneValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      
-      if (!value) {
-        return null;
-      }
-
-      // Email regex pattern
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      // Phone regex pattern (adjust based on your requirements)
-      const phonePattern = /^[\d\s\-\+\(\)]+$/;
-
-      const isValidEmail = emailPattern.test(value);
-      const isValidPhone = phonePattern.test(value) && value.replace(/\D/g, '').length >= 10;
-
-      if (isValidEmail || isValidPhone) {
-        return null; // Valid
-      }
-
-      return { emailOrPhone: true }; // Invalid
-    };
   }
 
   startOtpTimeout(): void {
