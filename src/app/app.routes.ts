@@ -3,6 +3,7 @@ import { Login } from './auth/containters/login/login';
 import { ForgetPassword } from './auth/containters/forgot-password/forgot-password';
 import { OtpVerification } from './auth/containters/otp-verification/otp-verification';
 import { ResetPassword } from './auth/containters/reset-password/reset-password';
+import { Dashboard } from './features/admin/dashboard/dashboard';
 
 export const routes: Routes = [
     // Mặc định vào trang login
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'reset-password', component: ResetPassword },
 
     // Trang sau khi đăng nhập
+    { path: 'admin-dashboard', component: Dashboard },
     // Hiện chưa làm
 
     // Xử lý đường dẫn không hợp lệ
