@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
-import { AuthLayout } from '../../ui-components/auth-layout/auth-layout';
+import { AuthLayout } from '../../../layouts/auth-layout/auth-layout';
 import { Button } from '../../ui-components/button/button';
 
 @Component({
@@ -13,7 +13,5 @@ import { Button } from '../../ui-components/button/button';
 
 export class ForgetPassword {
   
-  constructor(
-    private router: Router
-  ) { };
+  constructor() { };
 }
