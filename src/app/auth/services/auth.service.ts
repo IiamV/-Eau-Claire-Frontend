@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { verifyOtpRequest, requestOtpRequest } from "../../models/auth/otp";
 import { catchError, Observable, throwError, tap, map, of } from "rxjs";
 import { loginRequest } from "../../models/auth/login";
 import { environment } from "../../../environments/environment.dev";
-import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +11,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 
 export class AuthService {
     // Base URL for all authentication-related API calls
-    private baseUrl = environment.baseUrl
+    private baseUrl = environment.apiUrl;
     private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
     private requestUrl = `${this.baseUrl}/sys/request-otp`;
     private tokenUrl = `${this.baseUrl}/sys/token`;
@@ -23,7 +22,9 @@ export class AuthService {
      * Constructor for AuthService
      * @param http Angular HttpClient for performing HTTP requests
      */
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        console.log("Current API URL: ", this.baseUrl);
+     }
 
     /**
      * Sends a request to generate and send an OTP to the user.

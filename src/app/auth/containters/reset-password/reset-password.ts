@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
+import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
 import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
 import { Button } from "../../ui-components/button/button";
 

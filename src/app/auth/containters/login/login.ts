@@ -1,8 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 //import { AuthService } from '../../core/services/auth.service';
-import { AuthLayout } from "../../ui-components/auth-layout/auth-layout";
+import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
 import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
 import { Button } from "../../ui-components/button/button";
 import { loginRequest } from '../../../models/auth/login';
@@ -34,8 +34,10 @@ export class Login {
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required,
-      Validators.pattern('^[a-zA-Z0-9.@]+$')]],
-      password: ['', Validators.required],
+                      // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\\+?[0-9]{10,15}$'),
+                      Validators.maxLength(20)]],
+      password: ['', [Validators.required,
+                      Validators.maxLength(20)]],
       deviceId: [''],
     })
   };
@@ -44,7 +46,8 @@ export class Login {
     this.deviceService.getDeviceId().then(
       (id) => {
         if (id) {
-          this.deviceId = id;
+          // this.deviceId = id;
+          this.deviceId = '123';
         }
       }
     );
@@ -68,17 +71,22 @@ export class Login {
     this.errorMessage = '';
     // Validate form before proceeding
     if (this.loginForm.invalid) {
+      this.errorMessage='Invalid Input'
+
+      let userInput = this.loginForm.get('username');
+      if (userInput?.hasError('required')) {
+        this.errorMessage = 'Vui lòng nhập tên đăng nhập.'
+      } else if (userInput?.hasError('pattern') && userInput.value.includes('@')) {
+        this.errorMessage = 'Sai định dạng email.'
+      } else {
+        this.errorMessage = 'Sai định dạng sms.'
+      }
+
       let passwordInput = this.loginForm.get('password');
       if (passwordInput?.hasError('required')) {
         this.errorMessage = 'Vui lòng nhập mật khẩu.'
       }
 
-      let userInput = this.loginForm.get('username');
-      if (userInput?.hasError('required')) {
-        this.errorMessage = 'Vui lòng nhập tên đăng nhập.'
-      }
-
-      // this.errorMessage='Invalid Input'
       return;
     }
 
@@ -93,7 +101,7 @@ export class Login {
       next: (response) => {
         console.log("Login success:", response);
         this.isLoading.set(false);
-        // this.router.navigate(['/home']);
+        this.router.navigate(['/admin-dashboard']);
       },
       error: (error) => {
         this.errorMessage = "Request Failure.";
@@ -104,7 +112,7 @@ export class Login {
               this.isPopupOpen.set(true);
             }
             else {
-              this.errorMessage=error.error.message
+              this.errorMessage="Tên đăng nhập hoặc mật khẩu không chính xác.";
             }
             break;
           case 409:

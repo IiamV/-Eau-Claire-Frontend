@@ -44,7 +44,6 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 .md
-.github/
 
 # Angular specific
 /dist/
@@ -73,3 +72,4 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.vercel
