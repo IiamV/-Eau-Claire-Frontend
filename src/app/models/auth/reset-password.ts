@@ -5,6 +5,10 @@ export interface resetPasswordRequest {
     tempToken: string,
 }
 
-export interface resetPasswordResponse {
+export interface resetPasswordSuccessResponse {
+    message: string
+}
+
+export interface resetPasswordErrorResponse {
     message: string
 }

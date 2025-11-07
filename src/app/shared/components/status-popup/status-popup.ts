@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-status-popup',
   templateUrl: './status-popup.html',
-  styleUrls: ['./status-popup.css']
+  styleUrls: ['./status-popup.css'],
+  imports: [RouterLink]
 })
 export class StatusPopupComponent {
   @Input() isOpen: boolean = false;

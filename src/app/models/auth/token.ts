@@ -3,7 +3,7 @@ export interface exchangeTokenRequest {
     tempToken: string
 }
 
-export interface exchangeTokenResponse {
+export interface exchangeTokenSuccessResponse {
     status: string,
     accessToken: string,
     expiresIn: number,
@@ -20,4 +20,8 @@ export interface exchangeTokenResponse {
         CurrentPhoneNumber: string,
         DateOfBirth: string
     }
+}
+
+export interface exchangeTokenErrorResponse {
+    message: string
 }

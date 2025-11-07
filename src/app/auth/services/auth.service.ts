@@ -1,9 +1,10 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { verifyOtpRequest, requestOtpRequest } from "../../models/auth/otp";
+import { verifyOtpRequest, requestOtpRequest, verifyOtpSuccessResponse, requestOtpSuccessResponse, requestOtpErrorResponse, verifyOtpErrorResponse } from "../../models/auth/otp";
 import { catchError, Observable, throwError, tap, map, of } from "rxjs";
-import { loginRequest } from "../../models/auth/login";
+import { loginErrorResponse, loginRequest, loginSuccessResponse } from "../../models/auth/login";
 import { environment } from "../../../environments/environment.dev";
+import { resetPasswordErrorResponse, resetPasswordRequest, resetPasswordSuccessResponse } from "../../models/auth/reset-password";
 
 @Injectable({
     providedIn: 'root'
@@ -22,9 +23,7 @@ export class AuthService {
      * Constructor for AuthService
      * @param http Angular HttpClient for performing HTTP requests
      */
-    constructor(private http: HttpClient) {
-        console.log("Current API URL: ", this.baseUrl);
-     }
+    constructor(private http: HttpClient) {}
 
     /**
      * Sends a request to generate and send an OTP to the user.
@@ -34,9 +33,9 @@ export class AuthService {
     requestOtp(payload: requestOtpRequest): Observable<any> {
         console.log("Request Payload:", payload);
         // return of(true);
-        return this.http.post(this.requestUrl, payload).pipe(
-            catchError((error) => {
-                console.error('Request OTP failed:', error);
+        return this.http.post<requestOtpSuccessResponse>(this.requestUrl, payload).pipe(
+            catchError((error: requestOtpErrorResponse) => {
+                console.error('Request OTP failed:', error.message);
                 return throwError(() => error);
             })
         );
@@ -50,9 +49,12 @@ export class AuthService {
     verifyOtp(payload: verifyOtpRequest): Observable<any> {
         console.log("Verify Payload:", payload);
         // return of(true);
-        return this.http.post(this.verifyUrl, payload).pipe(
-            catchError((error) => {
-                console.error('Details:', error);
+        return this.http.post<verifyOtpSuccessResponse>(this.verifyUrl, payload).pipe(
+            tap((response) => {
+                localStorage.setItem('temp_token', response.tempToken);
+            }),
+            catchError((error: verifyOtpErrorResponse) => {
+                console.error('Details:', error.message);
                 return throwError(() => error);
             })
         );
@@ -67,8 +69,8 @@ export class AuthService {
         console.log("Login Payload:", payload);
         // return of(true);
         // return throwError(() => new Error('Unauthorized - Invalid credentials'));
-        return this.http.post(this.loginUrl, payload).pipe(
-            tap((response: any) => {
+        return this.http.post<loginSuccessResponse>(this.loginUrl, payload).pipe(
+            tap((response) => {
                 console.log('Login success');
                 localStorage.setItem('access_token', response.access_token);
             }),
@@ -77,18 +79,21 @@ export class AuthService {
                 let { access_token, ...data } = response;
                 return data;
             }),
-            catchError((error) => {
-                console.error("Details:", error);
+            catchError((error: loginErrorResponse) => {
+                console.error("Details:", error.message);
                 return throwError(() => error);
             })
         );
     };
 
-    resetPassword(payload: any): Observable<any> {
-        // console.log("Reset Payload:", payload);
-        return of(true);
-        return this.http.post(this.resetPasswordUrl, payload).pipe(
-
+    resetPassword(payload: resetPasswordRequest): Observable<any> {
+        console.log("Reset Payload:", payload);
+        // return of(true);
+        return this.http.post<resetPasswordSuccessResponse>(this.resetPasswordUrl, payload).pipe(
+            catchError((error: resetPasswordErrorResponse) => {
+                console.error("Details:", error.message);
+                return throwError(() => error);
+            })
         )
     }
 }
