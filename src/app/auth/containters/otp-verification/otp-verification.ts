@@ -54,7 +54,11 @@ export class OtpVerification {
   ) {
     // Subscribe to query parameters to get verification method (email/phone)
     this.route.queryParams.subscribe(params => {
-      this.otpPayload.method = params['verifyMethod']
+      this.otpPayload.method = params['verifyMethod'];
+
+      if (params['sms']) {
+        this.otpPayload.phone = params['sms'];
+      };
     }),
       this.deviceService.getDeviceId().then((id) => {
         if (id) {

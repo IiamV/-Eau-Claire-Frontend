@@ -22,7 +22,6 @@ export class Login {
   deviceId: string = '';
   isLoading = signal(false);
   errorMessage = '';
-  isPopupOpen = signal(false);
 
   loginForm!: FormGroup;
 
@@ -53,20 +52,17 @@ export class Login {
     );
   }
 
-  redirecToForgotPassword() {
+  redirecToOTP() {
     let method = this.loginForm.get('username')?.value.includes('@') ? 'email' : 'sms';
 
     this.router.navigate(['/otp-verification'], {
       queryParams: {
-        verifyMethod: method
+        verifyMethod: method,
+        sms: this.loginForm.get('username')?.value
       }
     });
   }
-
-  handleClose(): void {
-    this.isPopupOpen.set(false);
-  }
-
+  
   onLoginSubmit() {
     this.errorMessage = '';
     // Validate form before proceeding
@@ -109,7 +105,7 @@ export class Login {
           case 401:
             console.log("Unauthorized - Invalid credentials");
             if (!error.error.isDeviceVerified && error.error.message.includes("Device is not verified")) {
-              this.isPopupOpen.set(true);
+              this.redirecToOTP();
             }
             else {
               this.errorMessage="Tên đăng nhập hoặc mật khẩu không chính xác.";

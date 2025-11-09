@@ -5,6 +5,7 @@ import { catchError, Observable, throwError, tap, map, of } from "rxjs";
 import { loginErrorResponse, loginRequest, loginSuccessResponse } from "../../models/auth/login";
 import { environment } from "../../../environments/environment.dev";
 import { resetPasswordErrorResponse, resetPasswordRequest, resetPasswordSuccessResponse } from "../../models/auth/reset-password";
+import { exchangeTokenRequest } from "../../models/auth/token";
 
 @Injectable({
     providedIn: 'root'
@@ -91,6 +92,21 @@ export class AuthService {
         // return of(true);
         return this.http.post<resetPasswordSuccessResponse>(this.resetPasswordUrl, payload).pipe(
             catchError((error: resetPasswordErrorResponse) => {
+                console.error("Details:", error.message);
+                return throwError(() => error);
+            })
+        )
+    }
+
+    exchangeToken(payload: exchangeTokenRequest): Observable<any> {
+        console.log("Token Payload:", payload);
+        // return of(true);
+        return this.http.post<any>(this.tokenUrl, payload).pipe(
+            tap((response) => {
+                console.log('Exchange token success');
+                localStorage.setItem('access_token', response.access_token);
+            }),
+            catchError((error) => {
                 console.error("Details:", error.message);
                 return throwError(() => error);
             })
