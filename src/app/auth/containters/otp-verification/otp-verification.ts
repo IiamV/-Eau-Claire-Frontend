@@ -9,6 +9,7 @@ import { FormsInput } from '../../ui-components/primary-forms-input/primary-form
 import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { Button } from "../../ui-components/button/button";
 import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-otp-verification',
@@ -49,6 +50,7 @@ export class OtpVerification {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private authService: AuthService,
     private deviceService: DeviceFingerprintService,
   ) {
@@ -93,6 +95,7 @@ export class OtpVerification {
       next: (response) => {
         console.log("Request OTP Success:", response);
         this.isLoading.set(false);
+        this.router.navigate(['/reset-password']);
       },
       error: (error) => {
         console.error("Details: ", error);

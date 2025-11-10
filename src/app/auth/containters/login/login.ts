@@ -13,7 +13,7 @@ import { StatusPopupComponent } from "../../../shared/components/status-popup/st
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule, AuthLayout, FormsInput, Button, LoadingComponent, StatusPopupComponent],
+  imports: [RouterLink, ReactiveFormsModule, AuthLayout, FormsInput, Button, LoadingComponent],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -62,7 +62,7 @@ export class Login {
       }
     });
   }
-  
+
   onLoginSubmit() {
     this.errorMessage = '';
     // Validate form before proceeding
