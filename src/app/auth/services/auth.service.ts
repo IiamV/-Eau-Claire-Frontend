@@ -88,7 +88,7 @@ export class AuthService {
     };
 
     resetPassword(payload: resetPasswordRequest): Observable<any> {
-        console.log("Reset Payload:", payload);
+        // console.log("Reset Payload:", payload);
         // return of(true);
         return this.http.post<resetPasswordSuccessResponse>(this.resetPasswordUrl, payload).pipe(
             catchError((error: resetPasswordErrorResponse) => {
