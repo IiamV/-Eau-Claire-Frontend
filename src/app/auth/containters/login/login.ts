@@ -34,7 +34,7 @@ export class Login {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required,
                       // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\\+?[0-9]{10,15}$'),
-                      Validators.maxLength(20)]],
+                      Validators.maxLength(40)]],
       password: ['', [Validators.required,
                       Validators.maxLength(20)]],
       deviceId: [''],
@@ -54,11 +54,14 @@ export class Login {
 
   redirecToOTP() {
     let method = this.loginForm.get('username')?.value.includes('@') ? 'email' : 'sms';
+    // let method = 'sms';
 
     this.router.navigate(['/otp-verification'], {
       queryParams: {
         verifyMethod: method,
-        sms: this.loginForm.get('username')?.value
+        ...(method === 'email' ? { email: this.loginForm.get('username')?.value } : { sms: this.loginForm.get('username')?.value }),
+        title: 'Xác minh thiết bị',
+        isAutoForward: true
       }
     });
   }
@@ -72,9 +75,11 @@ export class Login {
       let userInput = this.loginForm.get('username');
       if (userInput?.hasError('required')) {
         this.errorMessage = 'Vui lòng nhập tên đăng nhập.'
+      } else if (userInput?.hasError('maxlength')) {
+        this.errorMessage = 'Tên đăng nhập quá lớn.'
       } else if (userInput?.hasError('pattern') && userInput.value.includes('@')) {
         this.errorMessage = 'Sai định dạng email.'
-      } else {
+      } else if (userInput?.hasError('pattern') && !userInput.value.includes('@')) {
         this.errorMessage = 'Sai định dạng sms.'
       }
 
