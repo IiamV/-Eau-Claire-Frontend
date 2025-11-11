@@ -1,11 +1,11 @@
 import { Injectable, Inject } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { verifyOtpRequest, requestOtpRequest, verifyOtpSuccessResponse, requestOtpSuccessResponse, requestOtpErrorResponse, verifyOtpErrorResponse } from "../../models/auth/otp";
 import { catchError, Observable, throwError, tap, map, of } from "rxjs";
 import { loginErrorResponse, loginRequest, loginSuccessResponse } from "../../models/auth/login";
 import { environment } from "../../../environments/environment.dev";
 import { resetPasswordErrorResponse, resetPasswordRequest, resetPasswordSuccessResponse } from "../../models/auth/reset-password";
-import { exchangeTokenRequest } from "../../models/auth/token";
+import { exchangeAuthTokenErrorResponse, exchangeAuthTokenRequest, exchangeAuthTokenSuccessResponse, exchangeTempTokenRequest, exchangeTempTokenSuccessResponse } from "../../models/auth/token";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +17,7 @@ export class AuthService {
     private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
     private requestUrl = `${this.baseUrl}/sys/request-otp`;
     private tokenUrl = `${this.baseUrl}/sys/token`;
+    private authTokenUrl = `${this.baseUrl}/sys/auth/token`;
     private loginUrl = `${this.baseUrl}/sys/login`;
     private resetPasswordUrl = `${this.baseUrl}/sys/reset-password`;
 
@@ -69,7 +70,14 @@ export class AuthService {
     login(payload: loginRequest): Observable<any> {
         console.log("Login Payload:", payload);
         // return of(true);
-        // return throwError(() => new Error('Unauthorized - Invalid credentials'));
+        // return throwError(() => new HttpErrorResponse({
+        //     error: {
+        //         message: "Device is not verified",
+        //         isDeviceVerified: false
+        //     },
+        //     status: 401,
+        //     statusText: "Unauthorized"
+        // }));
         return this.http.post<loginSuccessResponse>(this.loginUrl, payload).pipe(
             tap((response) => {
                 console.log('Login success');
@@ -98,15 +106,30 @@ export class AuthService {
         )
     }
 
-    exchangeToken(payload: exchangeTokenRequest): Observable<any> {
+    exchangeToken(payload: exchangeTempTokenRequest): Observable<any> {
         console.log("Token Payload:", payload);
         // return of(true);
-        return this.http.post<any>(this.tokenUrl, payload).pipe(
+        return this.http.post<exchangeTempTokenSuccessResponse>(this.tokenUrl, payload).pipe(
             tap((response) => {
                 console.log('Exchange token success');
-                localStorage.setItem('access_token', response.access_token);
+                // localStorage.setItem('temp_token', payload.tempToken);
             }),
             catchError((error) => {
+                console.error("Details:", error.message);
+                return throwError(() => error);
+            })
+        )
+    }
+
+    exchangeAuthToken(payload: exchangeAuthTokenRequest): Observable<any> {
+        // console.log("Token Payload:", payload);
+        // return of(true);
+        return this.http.post<exchangeAuthTokenSuccessResponse>(this.authTokenUrl, payload).pipe(
+            tap((response) => {
+                console.log('Exchange token success');
+                localStorage.setItem('access_token', response.accessToken);
+            }),
+            catchError((error: exchangeAuthTokenErrorResponse) => {
                 console.error("Details:", error.message);
                 return throwError(() => error);
             })

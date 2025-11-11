@@ -1,3 +1,12 @@
+<app-status-popup
+    [buttonText]="'Đăng nhập ngay'"
+    [message]="'Thiết bị của bạn đã được xác nhận thành công'"
+    [title]="'Thành công!'"
+    [isOpen]="isPopupOpen()"
+    (close)="isPopupOpen.set(false)"
+    [buttonLink]="'/login'"
+    [isSuccess]="true">
+</app-status-popup>
 <app-loading
     [message]="'Đang tải'"
     [isShow]="isLoading()"
@@ -6,7 +15,7 @@
     <div class="px-21 sm:px-5 md:px-0">
         <!-- @if (!isOtpSent()) { -->
         <h2 class="text-5xl font-bold text-center mb-5">
-            Quên mật khẩu
+            {{title()}}
         </h2>
 
         <!-- Form nhập email -->
@@ -55,8 +64,8 @@
                 <div class="flex justify-center gap-4 mt-5 mb-2">
                     <app-otp-input
                         #otpInput
-                        [extraInputClass]="'w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 text-center text-xl sm:text-2xl font-bold border-1 border-[#BD9F69] rounded-[13px] focus:border-[#BD9F69] focus:ring-1 focus:ring-[#BD9F69] outline-none transition'"
-                        [extraContainerClass]="'gap-2 sm:gap-3 md:gap-4'"
+                        [extraInputClass]="'w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 text-center text-xl sm:text-2xl font-bold border-1 rounded-[13px] focus:border-[#BD9F69] focus:ring-1 focus:ring-[#BD9F69] outline-none transition ' + ( verifyError() ? 'border-[#FF0000]' : 'border-[#BD9F69]')"
+                        [extraContainerClass]="'gap-2 sm:gap-3 md:gap-4 '"
                         [otpLength]=6
                         [isDisabled]="isOtpTimeout()"
                         (otpComplete)="verifyOtp()"
@@ -72,7 +81,7 @@
 
                     <div>
                         <span class="">Không nhận được mã?</span>
-                        <span (click)="requestOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
+                        <span (click)="requestOtp(); clearVerifyOtp()" class="text-[#BD9F69] hover:underline font-semibold cursor-pointer">
                             Gửi lại
                         </span>
                     </div>
@@ -90,7 +99,7 @@
         </div>
 
         <div class="text-center">
-            <a [routerLink]="['/forgot-password']"
+            <a (click)="goBack()"
                 class="text-sm sm:text-base text-black hover:underline cursor-pointer inline-flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -99,7 +108,7 @@
                 </svg>
 
                 <span>
-                    Quay lại
+                    Quay lại chọn phương thức xác minh
                 </span>
             </a>
         </div>

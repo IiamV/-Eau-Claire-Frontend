@@ -23,7 +23,7 @@ export interface verifyOtpRequest {
     phone: string,
     email: string,
     inputOtp: string,
-    purpose: string
+    purpose: 'login' | 'register' | 'generic'
 }
 
 export interface verifyOtpSuccessResponse {

@@ -8,10 +8,11 @@ import { resetPasswordRequest } from '../../../models/auth/reset-password';
 import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { isPlatformBrowser } from '@angular/common';
 import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-reset-password',
-  imports: [AuthLayout, FormsInput, Button, ReactiveFormsModule, LoadingComponent, StatusPopupComponent],
+  imports: [AuthLayout, FormsInput, Button, ReactiveFormsModule, LoadingComponent, StatusPopupComponent, RouterLink],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css'
 })

@@ -1,15 +1,28 @@
-export interface exchangeTokenRequest {
-    purpose: 'login' | 'register' | 'generic',
+export interface exchangeTempTokenRequest {
     tempToken: string
 }
 
-export interface exchangeTokenSuccessResponse {
+export interface exchangeTempTokenSuccessResponse {
     status: string,
+    message: string
+}
+
+export interface exchangeTempTokenErrorResponse {
+    message: string,
+    isDeviceVerified?: boolean
+}
+
+export interface exchangeAuthTokenRequest {
+    tempToken: string
+}
+
+export interface exchangeAuthTokenSuccessResponse {
+    status: number,
     accessToken: string,
     expiresIn: number,
     refreshExpiresIn: number,
     refreshToken: string,
-    tokenType: string,
+    tokenType: `Bearer ${string}`,
     scope: string,
     userId: number,
     isDeviceVerified: boolean,
@@ -22,6 +35,7 @@ export interface exchangeTokenSuccessResponse {
     }
 }
 
-export interface exchangeTokenErrorResponse {
-    message: string
+export interface exchangeAuthTokenErrorResponse {
+    message: string,
+    isDeviceVerified?: boolean
 }

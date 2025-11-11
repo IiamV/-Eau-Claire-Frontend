@@ -10,18 +10,21 @@ import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { Button } from "../../ui-components/button/button";
 import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
 import { Router } from '@angular/router';
+import { exchangeAuthTokenRequest, exchangeTempTokenRequest } from '../../../models/auth/token';
+import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
+import { response } from 'express';
 
 @Component({
   selector: 'app-otp-verification',
   standalone: true,
-  imports: [AuthLayout, RouterLink, ReactiveFormsModule, FormsModule, LoadingComponent, FormsInput, Button, OtpInputComponent],
+  imports: [AuthLayout, ReactiveFormsModule, FormsModule, LoadingComponent, FormsInput, Button, OtpInputComponent, StatusPopupComponent],
   templateUrl: './otp-verification.html',
   styleUrl: './otp-verification.css'
 })
 
 export class OtpVerification {
-  @ViewChild(OtpInputComponent) otpComponent!: OtpInputComponent;
-
+  @ViewChild('otpInput') otpComponent!: OtpInputComponent;
+  
   /**
    * Signal used to manage OTP sent status.
    * false: show email/phone input form
@@ -35,9 +38,16 @@ export class OtpVerification {
   remainingTime = this.otpTime;
   intervalId: any= null;
   errorMessage: string = '';
+  verifyError = signal(false);
+  title = signal('Quên mật khẩu');
+  isDeviceOTP = signal(false);
+  isPopupOpen = signal(false);
 
   // FormControl for email or phone input
-  requestForm = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\.?[0-9]{10,15}$')]);
+  requestForm = new FormControl('', [
+                                      Validators.required, 
+                                      // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\.?[0-9]{10,15}$')
+                                    ]);
 
   // Payload object to send OTP request or verification
   otpPayload: requestOtpRequest = {
@@ -54,30 +64,85 @@ export class OtpVerification {
     private authService: AuthService,
     private deviceService: DeviceFingerprintService,
   ) {
-    // Subscribe to query parameters to get verification method (email/phone)
-    this.route.queryParams.subscribe(params => {
-      this.otpPayload.method = params['verifyMethod'];
-
-      if (params['sms']) {
-        this.otpPayload.phone = params['sms'];
-      };
-    }),
-      this.deviceService.getDeviceId().then((id) => {
-        if (id) {
-          // this.otpPayload.deviceId = id;
-          this.otpPayload.deviceId = '123';
+    this.deviceService.getDeviceId().then((id) => {
+      if (id) {
+        // this.otpPayload.deviceId = id;
+        this.otpPayload.deviceId = '123';
+      }
+      
+      this.route.queryParams.subscribe(params => {
+        this.otpPayload.method = params['verifyMethod'];
+        if (params['sms']) {
+          this.otpPayload.phone = params['sms'];
+          this.requestForm.setValue(params['sms']);
         }
-      })
+        if (params['email']) {
+          this.otpPayload.email = params['email'];
+          this.requestForm.setValue(params['email']);
+        }
+        if (params['title']) {
+          this.title.set(params['title']);
+          this.isDeviceOTP.set(true);
+
+          if (params['isAutoForward']) {
+            this.isOtpSent.set(true);
+            this.requestOtp();
+          }
+        }
+      });
+    });
   }
 
   /**
    * Triggered when the user clicks "Send OTP".
    * Validates OTP length and calls verifyOtp API.
    */
+  clearVerifyOtp(): void {
+    this.otpComponent.clearOtp();
+    this.verifyError.set(false);
+  }
+
+  verifyTempToken(): void {
+    let payload: exchangeTempTokenRequest = {
+      tempToken: localStorage.getItem('temp_token') as string
+    };
+
+    if (!payload) {
+      return;
+    };
+
+    this.authService.exchangeToken(payload).subscribe({
+      next: (response) => {
+        console.log("Verified Temp Token");
+        this.router.navigate(['/reset-password']);
+      },
+      error: (error) => {
+        console.error("Details: ", error);
+      }
+    });
+  }
+
+  verifyDevice(): void {
+    let payload: exchangeAuthTokenRequest = {
+      tempToken: localStorage.getItem('temp_token') as string
+    }
+    this.authService.exchangeAuthToken(payload).subscribe({
+      next: (response) => {
+        console.log("Verified Auth Token");
+        this.router.navigate(['/admin-dashboard']);
+      },
+      error: (error) => {
+        console.error("Details: ", error);
+      }
+    })
+  }
+
   verifyOtp(): void {
+    this.errorMessage='';
+    this.verifyError.set(false);
     // Validate OTP
     if (this.otpComponent.getValue().length !== 6) {
-      console.log("Invalid OTP");
+      this.verifyError.set(true);
       return;
     }
 
@@ -86,7 +151,7 @@ export class OtpVerification {
     // Update payload with entered OTP
     let verifyPayload: verifyOtpRequest = {
       ...this.otpPayload,
-      purpose: 'generic',
+      ...(this.isDeviceOTP() ? {purpose: 'login'} : {purpose: 'generic'}),
       inputOtp: this.otpComponent.getValue()
     };
 
@@ -94,10 +159,16 @@ export class OtpVerification {
     this.authService.verifyOtp(verifyPayload).subscribe({
       next: (response) => {
         console.log("Request OTP Success:", response);
+        if (this.isDeviceOTP()) {
+          this.verifyDevice();
+        } else {
+          this.verifyTempToken();
+        }
         this.isLoading.set(false);
-        this.router.navigate(['/reset-password']);
+        this.verifyError.set(false);
       },
       error: (error) => {
+        this.verifyError.set(true);
         console.error("Details: ", error);
         this.isLoading.set(false);
       }
@@ -110,6 +181,7 @@ export class OtpVerification {
    */
   requestOtp(): void {
     // Validate input
+    this.errorMessage = '';
     if (this.requestForm.invalid || !this.requestForm.value) {
       let userInfo = this.requestForm.value;
       if (userInfo === '') {
@@ -150,11 +222,21 @@ export class OtpVerification {
       },
       error: (error) => {
         console.error("Request Details: ", error);
+        this.errorMessage = "Request Failure.";
         this.isOtpSent.set(false);
         this.isLoading.set(false);
       }
     });
   }
+
+  goBack(): void {
+    this.router.navigate(['/forgot-password'], {
+      queryParams: {
+        ...(this.isDeviceOTP() ? { title: this.title() } : {})
+      }
+    });
+  }
+  // verifyMethod=sms&sms=minhchau&title=Xác%20minh%20thiết%20bị
 
   startOtpTimeout(): void {
     this.isOtpActive.set(true);
