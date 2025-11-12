@@ -4,7 +4,7 @@ export interface loginRequest {
     deivceId: string
 };
 
-export interface loginResponse {
+export interface loginSuccessResponse {
     status: string,
     access_token: string,
     expires_in: number,
@@ -21,4 +21,9 @@ export interface loginResponse {
         CurrentPhoneNumber: string,
         DateOfBirth: string
     }
+};
+
+export interface loginErrorResponse {
+    message: string,
+    isDeviceVerified?: boolean
 };

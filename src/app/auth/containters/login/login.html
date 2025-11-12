@@ -2,15 +2,6 @@
     [isShow]="isLoading()"
     [message]="'Đang tải'">
 </app-loading>
-<app-status-popup
-    [isOpen]="isPopupOpen()"
-    [isSuccess]="false"
-    [buttonText]="'Xác minh thiết bị bằng OTP'"
-    [title]="'Chưa xác minh'"
-    [message]="'Cần phải xác minh thiết bị'"
-    (close)="handleClose()"
-    (buttonClick)="redirecToForgotPassword()">
-</app-status-popup>
 <!-- 
 <app-splash-animation>
 
@@ -44,7 +35,7 @@
                 [placeholder]="'Nhập mật khẩu'">
             </app-primary-forms-input>
 
-            <div class="mb-1 h-5 relative w-full">
+            <!-- <div class="mb-1 h-5 relative w-full"> -->
                 @if (errorMessage) {
                 <div id="error" class="text-black position items-start inline-flex gap-1 mb-0 ml-4">
                     <svg viewBox="0 0 24 24" class="w-4 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,13 +51,13 @@
                     <p>{{ errorMessage }}</p>
                 </div>
                 }
-            </div>
+            <!-- </div> -->
 
             <!-- Checkbox lưu tên đăng nhập và Quên Mật khẩu -->
             <div class="flex items-center justify-between mb-6 mt-0">
                 <div class="inline-flex items-center">
                     <label class="flex items-center cursor-pointer relative">
-                        <input type="checkbox" id="rememberMe" checked
+                        <input type="checkbox" id="rememberMe"
                             class="peer h-5 w-5 cursor-pointer transition-all appearance-none shadow hover:shadow-md bg-white border-3 border-slate-800 checked:border-slate-800"
                             id="check" />
                         <span
@@ -85,7 +76,7 @@
                     </label>
                 </div>
 
-                <a [routerLink]="'/forgot-password'" class="text-sm text-[#BD9F69] hover:underline">
+                <a [routerLink]="'/forgot-password'" [queryParams]="{}" class="text-sm text-[#BD9F69] hover:underline">
                     Quên mật khẩu?
                 </a>
             </div>
@@ -108,7 +99,7 @@
             </div>
 
             <div>
-                <a [routerLink]="'/register'" class="text-[#BD9F69] hover:underline">
+                <a class="text-[#BD9F69] hover:underline">
                     Đăng ký
                 </a>
             </div>

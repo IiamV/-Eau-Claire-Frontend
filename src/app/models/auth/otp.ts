@@ -6,9 +6,13 @@ export interface requestOtpRequest {
     email: string
 }
 
-export interface requestOtpResponse {
+export interface requestOtpSuccessResponse {
     isSuccess: boolean,
     errorCode: string,
+    message: string
+}
+
+export interface requestOtpErrorResponse {
     message: string
 }
 
@@ -19,9 +23,13 @@ export interface verifyOtpRequest {
     phone: string,
     email: string,
     inputOtp: string,
-    purpose: string
+    purpose: 'login' | 'register' | 'generic'
 }
 
-export interface verifyOtpResponse {
+export interface verifyOtpSuccessResponse {
     tempToken: string
+}
+
+export interface verifyOtpErrorResponse {
+    message: string
 }

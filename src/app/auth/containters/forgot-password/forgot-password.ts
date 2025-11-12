@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from "@angular/router";
-import { AuthLayout } from '../../ui-components/auth-layout/auth-layout';
+import { Component, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AuthLayout } from '../../../layouts/auth-layout/auth-layout';
 import { Button } from '../../ui-components/button/button';
 
 @Component({
@@ -12,8 +12,25 @@ import { Button } from '../../ui-components/button/button';
 })
 
 export class ForgetPassword {
-  
+  title = signal('Quên mật khẩu');
+
   constructor(
+    private route: ActivatedRoute,
     private router: Router
-  ) { };
+  ) {
+    this.route.queryParams.subscribe(params => {
+      if (params['title']) {
+        this.title.set(params['title']);
+      }
+    });
+  };
+
+  goNext(verifyMethod: 'email' | 'sms'): void {
+    this.router.navigate(['/otp-verification'], { 
+      queryParams: { 
+        verifyMethod: verifyMethod,
+        ...(this.title() ? { title: this.title() } : {}),
+      } 
+    });
+  }
 }
