@@ -1,6 +1,6 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 //import { AuthService } from '../../core/services/auth.service';
 import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
 import { FormsInput } from "../../ui-components/primary-forms-input/primary-forms-input";
@@ -9,7 +9,6 @@ import { loginRequest } from '../../../models/auth/login';
 import { AuthService } from '../../services/auth.service';
 import { DeviceFingerprintService } from '../../services/device.service';
 import { LoadingComponent } from "../../../shared/components/loading/loading";
-import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
 
 @Component({
   selector: 'app-login',
@@ -26,17 +25,17 @@ export class Login {
   loginForm!: FormGroup;
 
   constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private deviceService: DeviceFingerprintService,
+    readonly router: Router,
+    readonly formBuilder: FormBuilder,
+    readonly authService: AuthService,
+    readonly deviceService: DeviceFingerprintService,
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required,
-                      // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\\+?[0-9]{10,15}$'),
-                      Validators.maxLength(40)]],
+      // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\\+?[0-9]{10,15}$'),
+      Validators.maxLength(40)]],
       password: ['', [Validators.required,
-                      Validators.maxLength(20)]],
+      Validators.maxLength(20)]],
       deviceId: [''],
     })
   };
@@ -70,7 +69,7 @@ export class Login {
     this.errorMessage = '';
     // Validate form before proceeding
     if (this.loginForm.invalid) {
-      this.errorMessage='Invalid Input'
+      this.errorMessage = 'Invalid Input'
 
       let userInput = this.loginForm.get('username');
       if (userInput?.hasError('required')) {
@@ -113,7 +112,7 @@ export class Login {
               this.redirecToOTP();
             }
             else {
-              this.errorMessage="Tên đăng nhập hoặc mật khẩu không chính xác.";
+              this.errorMessage = "Tên đăng nhập hoặc mật khẩu không chính xác.";
             }
             break;
           case 409:

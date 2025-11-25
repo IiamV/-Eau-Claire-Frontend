@@ -15,8 +15,8 @@ export class ForgetPassword {
   title = signal('Quên mật khẩu');
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router
+    readonly route: ActivatedRoute,
+    readonly router: Router
   ) {
     this.route.queryParams.subscribe(params => {
       if (params['title']) {
@@ -26,11 +26,11 @@ export class ForgetPassword {
   };
 
   goNext(verifyMethod: 'email' | 'sms'): void {
-    this.router.navigate(['/otp-verification'], { 
-      queryParams: { 
+    this.router.navigate(['/otp-verification'], {
+      queryParams: {
         verifyMethod: verifyMethod,
         ...(this.title() ? { title: this.title() } : {}),
-      } 
+      }
     });
   }
 }

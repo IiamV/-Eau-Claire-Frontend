@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Output, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
-import { RouterLink, ActivatedRoute } from "@angular/router";
-import { ReactiveFormsModule, Validators, FormControl, FormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ActivatedRoute } from "@angular/router";
+import { ReactiveFormsModule, Validators, FormControl, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
 import { DeviceFingerprintService } from '../../services/device.service';
@@ -12,7 +12,6 @@ import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
 import { Router } from '@angular/router';
 import { exchangeAuthTokenRequest, exchangeTempTokenRequest } from '../../../models/auth/token';
 import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
-import { response } from 'express';
 
 @Component({
   selector: 'app-otp-verification',
@@ -24,7 +23,7 @@ import { response } from 'express';
 
 export class OtpVerification {
   @ViewChild('otpInput') otpComponent!: OtpInputComponent;
-  
+
   /**
    * Signal used to manage OTP sent status.
    * false: show email/phone input form
@@ -36,7 +35,7 @@ export class OtpVerification {
   isOtpActive = signal(false);
   otpTime = signal(5 * 60);
   remainingTime = this.otpTime;
-  intervalId: any= null;
+  intervalId: any = null;
   errorMessage: string = '';
   verifyError = signal(false);
   title = signal('Quên mật khẩu');
@@ -45,9 +44,9 @@ export class OtpVerification {
 
   // FormControl for email or phone input
   requestForm = new FormControl('', [
-                                      Validators.required, 
-                                      // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\.?[0-9]{10,15}$')
-                                    ]);
+    Validators.required,
+    // Validators.pattern('^[a-zA-Z0-9.-_+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+|\.?[0-9]{10,15}$')
+  ]);
 
   // Payload object to send OTP request or verification
   otpPayload: requestOtpRequest = {
@@ -59,17 +58,17 @@ export class OtpVerification {
   };
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private deviceService: DeviceFingerprintService,
+    readonly route: ActivatedRoute,
+    readonly router: Router,
+    readonly authService: AuthService,
+    readonly deviceService: DeviceFingerprintService,
   ) {
     this.deviceService.getDeviceId().then((id) => {
       if (id) {
         // this.otpPayload.deviceId = id;
         this.otpPayload.deviceId = '123';
       }
-      
+
       this.route.queryParams.subscribe(params => {
         this.otpPayload.method = params['verifyMethod'];
         if (params['sms']) {
@@ -138,7 +137,7 @@ export class OtpVerification {
   }
 
   verifyOtp(): void {
-    this.errorMessage='';
+    this.errorMessage = '';
     this.verifyError.set(false);
     // Validate OTP
     if (this.otpComponent.getValue().length !== 6) {
@@ -151,7 +150,7 @@ export class OtpVerification {
     // Update payload with entered OTP
     let verifyPayload: verifyOtpRequest = {
       ...this.otpPayload,
-      ...(this.isDeviceOTP() ? {purpose: 'login'} : {purpose: 'generic'}),
+      ...(this.isDeviceOTP() ? { purpose: 'login' } : { purpose: 'generic' }),
       inputOtp: this.otpComponent.getValue()
     };
 
@@ -249,7 +248,7 @@ export class OtpVerification {
 
     this.intervalId = setInterval(() => {
       this.otpTime.update(time => time - 1);
-      
+
       if (this.otpTime() <= 0) {
         this.isOtpActive.set(false);
         this.isOtpTimeout.set(true);
