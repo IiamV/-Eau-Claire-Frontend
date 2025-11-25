@@ -28,11 +28,11 @@ export class ResetPassword {
   };
   private token: string | null = null;
 
-  constructor (
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
+  constructor(
+    readonly formBuilder: FormBuilder,
+    readonly authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) { 
+  ) {
     this.resetForm = this.formBuilder.group({
       newPassword: ['', [Validators.required, Validators.maxLength(20)]],
       confirmPassword: ['', [Validators.required, Validators.maxLength(20)]],

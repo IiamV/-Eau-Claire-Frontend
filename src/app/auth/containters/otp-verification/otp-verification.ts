@@ -1,6 +1,5 @@
 import { Component, signal, ViewChild } from '@angular/core';
 import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
-import { ActivatedRoute } from "@angular/router";
 import { ReactiveFormsModule, Validators, FormControl, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
@@ -9,7 +8,7 @@ import { FormsInput } from '../../ui-components/primary-forms-input/primary-form
 import { LoadingComponent } from "../../../shared/components/loading/loading";
 import { Button } from "../../ui-components/button/button";
 import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { exchangeAuthTokenRequest, exchangeTempTokenRequest } from '../../../models/auth/token';
 import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
 

@@ -1,7 +1,7 @@
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { verifyOtpRequest, requestOtpRequest, verifyOtpSuccessResponse, requestOtpSuccessResponse, requestOtpErrorResponse, verifyOtpErrorResponse } from "../../models/auth/otp";
-import { catchError, Observable, throwError, tap, map, of } from "rxjs";
+import { catchError, Observable, throwError, tap, map } from "rxjs";
 import { loginErrorResponse, loginRequest, loginSuccessResponse } from "../../models/auth/login";
 import { environment } from "../../../environments/environment.dev";
 import { resetPasswordErrorResponse, resetPasswordRequest, resetPasswordSuccessResponse } from "../../models/auth/reset-password";
@@ -13,19 +13,19 @@ import { exchangeAuthTokenErrorResponse, exchangeAuthTokenRequest, exchangeAuthT
 
 export class AuthService {
     // Base URL for all authentication-related API calls
-    private baseUrl = environment.apiUrl;
-    private verifyUrl = `${this.baseUrl}/sys/verify-otp`;
-    private requestUrl = `${this.baseUrl}/sys/request-otp`;
-    private tokenUrl = `${this.baseUrl}/sys/token`;
-    private authTokenUrl = `${this.baseUrl}/sys/auth/token`;
-    private loginUrl = `${this.baseUrl}/sys/login`;
-    private resetPasswordUrl = `${this.baseUrl}/sys/reset-password`;
+    readonly baseUrl = environment.apiUrl;
+    readonly verifyUrl = `${this.baseUrl}/sys/verify-otp`;
+    readonly requestUrl = `${this.baseUrl}/sys/request-otp`;
+    readonly tokenUrl = `${this.baseUrl}/sys/token`;
+    readonly authTokenUrl = `${this.baseUrl}/sys/auth/token`;
+    readonly loginUrl = `${this.baseUrl}/sys/login`;
+    readonly resetPasswordUrl = `${this.baseUrl}/sys/reset-password`;
 
     /**
      * Constructor for AuthService
      * @param http Angular HttpClient for performing HTTP requests
      */
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     /**
      * Sends a request to generate and send an OTP to the user.

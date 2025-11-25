@@ -1,10 +1,10 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-primary-forms-input',
   standalone: true, // Since this doesn't use any Angular-specific features
-  imports: [ ReactiveFormsModule ],
+  imports: [ReactiveFormsModule],
   templateUrl: './primary-forms-input.html',
   styleUrl: './primary-forms-input.css',
   providers: [
@@ -31,9 +31,9 @@ export class FormsInput {
   disabled: boolean = false;
 
   // Callback triggered when the value changes (provided by Angular forms)
-  private onChange: (value: string) => void = () => {};
+  private onChange: (value: string) => void = () => { };
   // Callback triggered when the input is touched (blur event)
-  private onTouched: () => void = () => {};
+  private onTouched: () => void = () => { };
 
   /**
    * Handles input value changes from the user.
