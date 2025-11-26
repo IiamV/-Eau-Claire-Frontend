@@ -25,7 +25,7 @@ export class AuthService {
      * Constructor for AuthService
      * @param http Angular HttpClient for performing HTTP requests
      */
-    constructor(private http: HttpClient) { }
+    constructor(readonly http: HttpClient) { }
 
     /**
      * Sends a request to generate and send an OTP to the user.

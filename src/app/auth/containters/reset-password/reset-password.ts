@@ -31,7 +31,7 @@ export class ResetPassword {
   constructor(
     readonly formBuilder: FormBuilder,
     readonly authService: AuthService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) readonly platformId: Object
   ) {
     this.resetForm = this.formBuilder.group({
       newPassword: ['', [Validators.required, Validators.maxLength(20)]],
