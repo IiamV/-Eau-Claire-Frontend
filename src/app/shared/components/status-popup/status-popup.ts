@@ -15,7 +15,7 @@ export class StatusPopupComponent {
   @Input() buttonText: string = '';
   @Input() buttonLink?: string;
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closePopup = new EventEmitter<void>();
   @Output() buttonClick = new EventEmitter<void>();
 
   constructor(
@@ -24,7 +24,7 @@ export class StatusPopupComponent {
 
   onClose(): void {
     document.body.style.cursor = 'default';
-    this.close.emit();
+    this.closePopup.emit();
   }
 
   onButtonClick(): void {
