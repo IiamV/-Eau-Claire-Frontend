@@ -37,7 +37,7 @@ export class OtpInputComponent implements OnInit {
     if (this.isDisabled) return;
 
     const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/[^\d]/g, '');
+    const value = input.value.replaceAll(/[^\d]/g, '');
 
     if (value.length > 1) {
       this.handlePaste(value, index);
@@ -104,7 +104,7 @@ export class OtpInputComponent implements OnInit {
 
     event.preventDefault();
     const pastedData = event.clipboardData?.getData('text') || '';
-    const digits = pastedData.replace(/[^\d]/g, '');
+    const digits = pastedData.replaceAll(/[^\d]/g, '');
 
     if (digits) {
       this.handlePaste(digits, index);
@@ -194,7 +194,7 @@ export class OtpInputComponent implements OnInit {
   }
 
   public setValue(value: string): void {
-    const digits = (value || '').replace(/[^\d]/g, '').slice(0, this.otpLength);
+    const digits = (value || '').replaceAll(/[^\d]/g, '').slice(0, this.otpLength);
     this.otp = [...digits.split(''), ...new Array(this.otpLength - digits.length).fill('')];
 
     this.otpInputs.forEach((input, index) => {
