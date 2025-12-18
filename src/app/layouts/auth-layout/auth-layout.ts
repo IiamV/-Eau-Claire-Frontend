@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from '../../../environments/environment.dev';
 
 @Component({
@@ -13,7 +13,6 @@ export class AuthLayout {
     logoUrl = this.assetUrl + '/logo/eau-claire-logo.png';
     pictureUrl = this.assetUrl + '/images/login-page.png';
 
-    constructor() {
-        console.log(this.pictureUrl);
-     }
+
+    constructor() { }
 }

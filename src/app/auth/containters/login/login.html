@@ -1,20 +1,5 @@
-<app-loading
-    [isShow]="isLoading()"
-    [message]="'Đang tải'">
+<app-loading [isShow]="isLoading()" [message]="'Đang tải'">
 </app-loading>
-<app-status-popup
-    [isOpen]="isPopupOpen()"
-    [isSuccess]="false"
-    [buttonText]="'Xác minh thiết bị bằng OTP'"
-    [title]="'Chưa xác minh'"
-    [message]="'Cần phải xác minh thiết bị'"
-    (close)="handleClose()"
-    (buttonClick)="redirecToForgotPassword()">
-</app-status-popup>
-<!-- 
-<app-splash-animation>
-
-</app-splash-animation> -->
 
 <app-auth-layout>
     <div>
@@ -25,42 +10,33 @@
         <!--Login Form -->
         <form [formGroup]="loginForm" (ngSubmit)="!isLoading() && onLoginSubmit()" class="space-y-4">
             <!-- Nhập Email -->
-            <app-primary-forms-input 
-                [formControlName]="'username'" 
-                [id]="'email'" 
-                [label]="'Email / Số điện thoại'" 
-                [type]="'email'"
-                [extraClass]="'rounded-xl placeholder-[#000000]/50 w-full h-13'"
+            <app-primary-forms-input [formControlName]="'username'" [id]="'email'" [label]="'Email / Số điện thoại'"
+                [type]="'email'" [extraClass]="'rounded-xl placeholder-[#000000]/50 w-full h-13'"
                 [placeholder]="'Example@gmail.com'">
             </app-primary-forms-input>
 
             <!-- Nhập mật khẩu -->
-            <app-primary-forms-input 
-                [formControlName]="'password'" 
-                [id]="'password'" 
-                [label]="'Mật khẩu'" 
-                [type]="'password'"
-                [extraClass]="'rounded-xl placeholder-[#000000]/50 w-full h-13'"
+            <app-primary-forms-input [formControlName]="'password'" [id]="'password'" [label]="'Mật khẩu'"
+                [type]="'password'" [extraClass]="'rounded-xl placeholder-[#000000]/50 w-full h-13'"
                 [placeholder]="'Nhập mật khẩu'">
             </app-primary-forms-input>
 
-            <div class="mb-1 h-5 relative w-full">
-                @if (errorMessage) {
-                <div id="error" class="text-black position items-start inline-flex gap-1 mb-0 ml-4">
-                    <svg viewBox="0 0 24 24" class="w-4 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12ZM12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25ZM12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"
-                                fill="#ef4444"></path>
-                        </g>
-                    </svg>
+            <!-- Hiển thị lỗi đăng nhập -->
+            @if (errorMessage) {
+            <div id="error" class="text-black position items-start inline-flex gap-1 mb-0 ml-4">
+                <svg viewBox="0 0 24 24" class="w-4 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g class="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g class="SVGRepo_iconCarrier">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12ZM12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25ZM12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"
+                            fill="#ef4444"></path>
+                    </g>
+                </svg>
 
-                    <p>{{ errorMessage }}</p>
-                </div>
-                }
+                <p>{{ errorMessage }}</p>
             </div>
+            }
 
             <!-- Checkbox lưu tên đăng nhập và Quên Mật khẩu -->
             <div class="flex items-center justify-between mb-6 mt-0">
@@ -85,15 +61,14 @@
                     </label>
                 </div>
 
-                <a [routerLink]="'/forgot-password'" class="text-sm text-[#BD9F69] hover:underline">
+                <a [routerLink]="'/forgot-password'" [queryParams]="{}" class="text-sm text-[#BD9F69] hover:underline">
                     Quên mật khẩu?
                 </a>
             </div>
 
             <!-- Nút đăng nhập -->
             <div class="justify-center flex">
-                <app-button
-                    [buttonType]="'submit'"
+                <app-button [buttonType]="'submit'"
                     [extraClass]="'rounded-xl h-14 text-base w-3xs bg-[#BD9F69] text-white hover:bg-[#A1834F]'"
                     [buttonText]="'Đăng nhập'">
                 </app-button>
@@ -108,7 +83,7 @@
             </div>
 
             <div>
-                <a [routerLink]="'/register'" class="text-[#BD9F69] hover:underline">
+                <a class="text-[#BD9F69] hover:underline">
                     Đăng ký
                 </a>
             </div>
@@ -118,19 +93,28 @@
             <app-button
                 [extraClass]="'rounded-xl inline-flex items-center border-2 text-base w-100 justify-center gap-6 border-[#BD9F69] text-gray-800 hover:bg-[#BD9F69]/20'"
                 [buttonText]="'Đăng nhập bằng Google'">
-                <svg width="30px" height="30px" viewBox="0 0 262.00 262.00" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" fill="#000000" stroke="#000000" stroke-width="0.00262">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" fill="#4285F4"></path>
-                        <path d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" fill="#34A853"></path>
-                        <path d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" fill="#FBBC05"></path>
-                        <path d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" fill="#EB4335"></path>
+                <svg width="30px" height="30px" viewBox="0 0 262.00 262.00" xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="xMidYMid" fill="#000000" stroke="#000000" stroke-width="0.00262">
+                    <g class="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g class="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g class="SVGRepo_iconCarrier">
+                        <path
+                            d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
+                            fill="#4285F4"></path>
+                        <path
+                            d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
+                            fill="#34A853"></path>
+                        <path
+                            d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"
+                            fill="#FBBC05"></path>
+                        <path
+                            d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
+                            fill="#EB4335"></path>
                     </g>
                 </svg>
             </app-button>
 
-            
+
         </div>
     </div>
 </app-auth-layout>

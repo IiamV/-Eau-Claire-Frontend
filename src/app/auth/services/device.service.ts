@@ -7,7 +7,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 })
 export class DeviceFingerprintService {
   private fpPromise: Promise<any> | null = null;
-  private isBrowser: boolean;
+  readonly isBrowser: boolean;
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);

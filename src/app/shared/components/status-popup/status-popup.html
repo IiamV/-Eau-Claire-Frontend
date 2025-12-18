@@ -1,5 +1,5 @@
 @if (isOpen) {
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 text-base">
   <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center relative">
     
     <!-- Close X Button -->
@@ -27,8 +27,8 @@
       @if (isSuccess) {
         <!-- Success Icon -->
         <svg
-            width="120"
-            height="120"
+            width="80"
+            height="80"
             viewBox="0 0 120 120"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +36,7 @@
           <path
             d="M35 62L50 77L85 42"
             stroke="white"
-            stroke-width="8"
+            stroke-width="15"
             stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
@@ -60,19 +60,20 @@
     </div>
     
     <!-- Title -->
-    <h2 class="text-3xl font-bold text-gray-900">
+    <h2 class="text-3xl mb-2">
       {{ title }}
     </h2>
     
     <!-- Message -->
-    <p class="text-gray-600 text-base mb-2 leading-relaxed">
+    <p class="text-base mb-2 leading-relaxed w-5/6 mx-auto">
       {{ message }}
     </p>
     
     <!-- Action Button -->
     <button
+      [routerLink]="[buttonLink]"
       (click)="onButtonClick()"
-      class="border-2 border-[#BD9F69] text-black cursor-pointer px-3 py-1 rounded-full transition-colors duration-200"
+      class="bg-[#64B5F6] text-white cursor-pointer px-6 py-2 rounded-full transition-colors duration-200"
       [style.background-color]="buttonColor">
       {{ buttonText }}
     </button>
