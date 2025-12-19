@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { AuthLayout } from '../../../layouts/auth-layout/auth-layout';
 import { FormsInput } from '../../ui-components/primary-forms-input/primary-forms-input';
 import { Button } from '../../ui-components/button/button';
-import { LoginErrorResponse, LoginRequest, LoginSuccessResponse } from '../../../models/auth/login';
+import { LoginRequest, LoginSuccessResponse } from '../../../models/auth/login';
 import { AuthService } from '../../services/auth.service';
 import { DeviceFingerprintService } from '../../services/device.service';
 import { LoadingComponent } from '../../../shared/components/loading/loading';
