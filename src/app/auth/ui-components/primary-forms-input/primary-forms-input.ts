@@ -6,15 +6,14 @@ import { ReactiveFormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
   standalone: true, // Since this doesn't use any Angular-specific features
   imports: [ReactiveFormsModule],
   templateUrl: './primary-forms-input.html',
-  styleUrl: './primary-forms-input.css',
   providers: [
     {
       // Register this component as a ControlValueAccessor
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FormsInput), // Forward reference to the component itself
-      multi: true // Allows multiple value accessors to coexist
-    }
-  ]
+      multi: true, // Allows multiple value accessors to coexist
+    },
+  ],
 })
 export class FormsInput {
   @Input() showIcon: boolean = false;
@@ -31,9 +30,9 @@ export class FormsInput {
   disabled: boolean = false;
 
   // Callback triggered when the value changes (provided by Angular forms)
-  private onChange: (value: string) => void = () => { };
+  private onChange: (value: string) => void = () => {};
   // Callback triggered when the input is touched (blur event)
-  private onTouched: () => void = () => { };
+  private onTouched: () => void = () => {};
 
   /**
    * Handles input value changes from the user.

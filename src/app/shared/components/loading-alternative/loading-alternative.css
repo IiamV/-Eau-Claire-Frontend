@@ -46,11 +46,15 @@
 }
 
 @keyframes splashAppear {
-  0%, 25%, 75%, 100% {
+  0%,
+  25%,
+  75%,
+  100% {
     opacity: 0;
     transform: scale(0.7);
   }
-  30%, 70% {
+  30%,
+  70% {
     opacity: 1;
     transform: scale(1);
   }
@@ -67,7 +71,8 @@
 }
 
 @keyframes rippleExpand {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(0.6) scaleY(1);
   }
@@ -101,7 +106,8 @@
 }
 
 @keyframes columnRise {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scaleY(0);
   }
@@ -120,7 +126,8 @@
 }
 
 @keyframes topBulge {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(0);
   }
@@ -143,16 +150,19 @@
 }
 
 /* Side splashes - left */
-.splash-left-1, .splash-left-1-top {
+.splash-left-1,
+.splash-left-1-top {
   animation: splashSideLeft1 4s ease-out infinite;
 }
 
-.splash-left-2, .splash-left-2-top {
+.splash-left-2,
+.splash-left-2-top {
   animation: splashSideLeft2 4s ease-out infinite;
 }
 
 @keyframes splashSideLeft1 {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(20px) scale(0);
   }
@@ -171,7 +181,8 @@
 }
 
 @keyframes splashSideLeft2 {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(20px) scale(0);
   }
@@ -190,16 +201,19 @@
 }
 
 /* Side splashes - right */
-.splash-right-1, .splash-right-1-top {
+.splash-right-1,
+.splash-right-1-top {
   animation: splashSideRight1 4s ease-out infinite;
 }
 
-.splash-right-2, .splash-right-2-top {
+.splash-right-2,
+.splash-right-2-top {
   animation: splashSideRight2 4s ease-out infinite;
 }
 
 @keyframes splashSideRight1 {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(20px) scale(0);
   }
@@ -218,7 +232,8 @@
 }
 
 @keyframes splashSideRight2 {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(20px) scale(0);
   }
@@ -241,17 +256,34 @@
   animation: dropletFly 4s ease-out infinite;
 }
 
-.droplet-1 { animation-delay: 0.1s; }
-.droplet-2 { animation-delay: 0.12s; }
-.droplet-3 { animation-delay: 0.15s; }
-.droplet-4 { animation-delay: 0.15s; }
-.droplet-5 { animation-delay: 0.08s; }
-.droplet-6 { animation-delay: 0.08s; }
-.droplet-7 { animation-delay: 0.13s; }
-.droplet-8 { animation-delay: 0.13s; }
+.droplet-1 {
+  animation-delay: 0.1s;
+}
+.droplet-2 {
+  animation-delay: 0.12s;
+}
+.droplet-3 {
+  animation-delay: 0.15s;
+}
+.droplet-4 {
+  animation-delay: 0.15s;
+}
+.droplet-5 {
+  animation-delay: 0.08s;
+}
+.droplet-6 {
+  animation-delay: 0.08s;
+}
+.droplet-7 {
+  animation-delay: 0.13s;
+}
+.droplet-8 {
+  animation-delay: 0.13s;
+}
 
 @keyframes dropletFly {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(10px) scale(0);
   }
@@ -278,15 +310,28 @@
   animation: sprayFloat 4s ease-out infinite;
 }
 
-.spray-1 { animation-delay: 0.15s; }
-.spray-2 { animation-delay: 0.17s; }
-.spray-3 { animation-delay: 0.18s; }
-.spray-4 { animation-delay: 0.18s; }
-.spray-5 { animation-delay: 0.2s; }
-.spray-6 { animation-delay: 0.2s; }
+.spray-1 {
+  animation-delay: 0.15s;
+}
+.spray-2 {
+  animation-delay: 0.17s;
+}
+.spray-3 {
+  animation-delay: 0.18s;
+}
+.spray-4 {
+  animation-delay: 0.18s;
+}
+.spray-5 {
+  animation-delay: 0.2s;
+}
+.spray-6 {
+  animation-delay: 0.2s;
+}
 
 @keyframes sprayFloat {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: translateY(5px) scale(0);
   }

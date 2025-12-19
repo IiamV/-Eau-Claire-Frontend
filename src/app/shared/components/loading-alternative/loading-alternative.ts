@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './loading-alternative.html',
-  styleUrls: ['./loading-alternative.css']
+  styleUrls: ['./loading-alternative.css'],
 })
 export class SplashAnimationComponent {
   @Input() duration: number = 3000; // Animation duration in ms

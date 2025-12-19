@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
   selector: 'app-button',
   imports: [],
   templateUrl: './button.html',
-  styleUrl: './button.css'
 })
 export class Button {
   @Input() buttonText: string = '';

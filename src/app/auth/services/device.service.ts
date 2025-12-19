@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DeviceFingerprintService {
   private fpPromise: Promise<any> | null = null;
@@ -27,14 +27,12 @@ export class DeviceFingerprintService {
       return Promise.resolve(null);
     }
 
-    if (!this.fpPromise) {
-      this.fpPromise = FingerprintJS.load();
-    }
+    this.fpPromise ??= FingerprintJS.load();
 
     return this.fpPromise
-      .then(fp => fp.get())
-      .then(result => result.visitorId)
-      .catch(error => {
+      .then((fp) => fp.get())
+      .then((result) => result.visitorId)
+      .catch((error) => {
         console.error('Error getting device fingerprint:', error);
         return null;
       });
@@ -49,18 +47,16 @@ export class DeviceFingerprintService {
       return Promise.resolve(null);
     }
 
-    if (!this.fpPromise) {
-      this.fpPromise = FingerprintJS.load();
-    }
+    this.fpPromise ??= FingerprintJS.load();
 
     return this.fpPromise
-      .then(fp => fp.get())
-      .then(result => ({
+      .then((fp) => fp.get())
+      .then((result) => ({
         visitorId: result.visitorId,
         confidence: result.confidence,
-        components: result.components
+        components: result.components,
       }))
-      .catch(error => {
+      .catch((error) => {
         console.error('Error getting device fingerprint:', error);
         return null;
       });

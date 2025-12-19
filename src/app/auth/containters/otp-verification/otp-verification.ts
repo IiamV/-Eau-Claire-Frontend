@@ -1,26 +1,33 @@
-import { Component, signal, ViewChild } from '@angular/core';
-import { AuthLayout } from "../../../layouts/auth-layout/auth-layout";
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { AuthLayout } from '../../../layouts/auth-layout/auth-layout';
 import { ReactiveFormsModule, Validators, FormControl, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { requestOtpRequest, verifyOtpRequest } from '../../../models/auth/otp';
+import { RequestOtpRequest, VerifyOtpRequest } from '../../../models/auth/otp';
 import { DeviceFingerprintService } from '../../services/device.service';
 import { FormsInput } from '../../ui-components/primary-forms-input/primary-forms-input';
-import { LoadingComponent } from "../../../shared/components/loading/loading";
-import { Button } from "../../ui-components/button/button";
-import { OtpInputComponent } from "../../ui-components/otp-input/otp-input";
+import { LoadingComponent } from '../../../shared/components/loading/loading';
+import { Button } from '../../ui-components/button/button';
+import { OtpInputComponent } from '../../ui-components/otp-input/otp-input';
 import { Router, ActivatedRoute } from '@angular/router';
-import { exchangeAuthTokenRequest, exchangeTempTokenRequest } from '../../../models/auth/token';
-import { StatusPopupComponent } from "../../../shared/components/status-popup/status-popup";
+import { ExchangeAuthTokenRequest, ExchangeTempTokenRequest } from '../../../models/auth/token';
+import { StatusPopupComponent } from '../../../shared/components/status-popup/status-popup';
 
 @Component({
   selector: 'app-otp-verification',
   standalone: true,
-  imports: [AuthLayout, ReactiveFormsModule, FormsModule, LoadingComponent, FormsInput, Button, OtpInputComponent, StatusPopupComponent],
+  imports: [
+    AuthLayout,
+    ReactiveFormsModule,
+    FormsModule,
+    LoadingComponent,
+    FormsInput,
+    Button,
+    OtpInputComponent,
+    StatusPopupComponent,
+  ],
   templateUrl: './otp-verification.html',
-  styleUrl: './otp-verification.css'
 })
-
-export class OtpVerification {
+export class OtpVerification implements OnInit {
   @ViewChild('otpInput') otpComponent!: OtpInputComponent;
 
   /**
@@ -48,46 +55,56 @@ export class OtpVerification {
   ]);
 
   // Payload object to send OTP request or verification
-  otpPayload: requestOtpRequest = {
+  otpPayload: RequestOtpRequest = {
     method: '',
     userId: 3,
     deviceId: '',
     phone: '',
-    email: ''
+    email: '',
   };
 
   constructor(
     readonly route: ActivatedRoute,
     readonly router: Router,
     readonly authService: AuthService,
-    readonly deviceService: DeviceFingerprintService,
-  ) {
-    this.deviceService.getDeviceId().then((id) => {
-      if (id) {
-        // this.otpPayload.deviceId = id;
-        this.otpPayload.deviceId = '123';
+    readonly deviceService: DeviceFingerprintService
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    await this.initializeDeviceId();
+    this.initializeQueryParams();
+  }
+
+  private async initializeDeviceId(): Promise<void> {
+    const id = await this.deviceService.getDeviceId();
+    if (id) {
+      this.otpPayload.deviceId = '123';
+    }
+  }
+
+  private initializeQueryParams(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.otpPayload.method = params['verifyMethod'];
+
+      if (params['sms']) {
+        this.otpPayload.phone = params['sms'];
+        this.requestForm.setValue(params['sms']);
       }
 
-      this.route.queryParams.subscribe(params => {
-        this.otpPayload.method = params['verifyMethod'];
-        if (params['sms']) {
-          this.otpPayload.phone = params['sms'];
-          this.requestForm.setValue(params['sms']);
-        }
-        if (params['email']) {
-          this.otpPayload.email = params['email'];
-          this.requestForm.setValue(params['email']);
-        }
-        if (params['title']) {
-          this.title.set(params['title']);
-          this.isDeviceOTP.set(true);
+      if (params['email']) {
+        this.otpPayload.email = params['email'];
+        this.requestForm.setValue(params['email']);
+      }
 
-          if (params['isAutoForward']) {
-            this.isOtpSent.set(true);
-            this.requestOtp();
-          }
+      if (params['title']) {
+        this.title.set(params['title']);
+        this.isDeviceOTP.set(true);
+
+        if (params['isAutoForward']) {
+          this.isOtpSent.set(true);
+          this.requestOtp();
         }
-      });
+      }
     });
   }
 
@@ -101,38 +118,38 @@ export class OtpVerification {
   }
 
   verifyTempToken(): void {
-    let payload: exchangeTempTokenRequest = {
-      tempToken: localStorage.getItem('temp_token') as string
+    let payload: ExchangeTempTokenRequest = {
+      tempToken: localStorage.getItem('temp_token') as string,
     };
 
     if (!payload) {
       return;
-    };
+    }
 
     this.authService.exchangeToken(payload).subscribe({
       next: (response) => {
-        console.log("Verified Temp Token");
+        console.log('Verified Temp Token');
         this.router.navigate(['/reset-password']);
       },
       error: (error) => {
-        console.error("Details: ", error);
-      }
+        console.error('Details: ', error);
+      },
     });
   }
 
   verifyDevice(): void {
-    let payload: exchangeAuthTokenRequest = {
-      tempToken: localStorage.getItem('temp_token') as string
-    }
+    let payload: ExchangeAuthTokenRequest = {
+      tempToken: localStorage.getItem('temp_token') as string,
+    };
     this.authService.exchangeAuthToken(payload).subscribe({
       next: (response) => {
-        console.log("Verified Auth Token");
+        console.log('Verified Auth Token');
         this.router.navigate(['/admin-dashboard']);
       },
       error: (error) => {
-        console.error("Details: ", error);
-      }
-    })
+        console.error('Details: ', error);
+      },
+    });
   }
 
   verifyOtp(): void {
@@ -147,16 +164,16 @@ export class OtpVerification {
     this.isLoading.set(true);
 
     // Update payload with entered OTP
-    let verifyPayload: verifyOtpRequest = {
+    let verifyPayload: VerifyOtpRequest = {
       ...this.otpPayload,
       ...(this.isDeviceOTP() ? { purpose: 'login' } : { purpose: 'generic' }),
-      inputOtp: this.otpComponent.getValue()
+      inputOtp: this.otpComponent.getValue(),
     };
 
     // Call API to verify OTP
     this.authService.verifyOtp(verifyPayload).subscribe({
       next: (response) => {
-        console.log("Request OTP Success:", response);
+        console.log('Request OTP Success:', response);
         if (this.isDeviceOTP()) {
           this.verifyDevice();
         } else {
@@ -167,9 +184,9 @@ export class OtpVerification {
       },
       error: (error) => {
         this.verifyError.set(true);
-        console.error("Details: ", error);
+        console.error('Details: ', error);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
@@ -207,31 +224,31 @@ export class OtpVerification {
     this.otpPayload = {
       ...this.otpPayload,
       email: this.otpPayload.method === 'email' ? this.requestForm.value : '',
-      phone: this.otpPayload.method === 'sms' ? this.requestForm.value : ''
+      phone: this.otpPayload.method === 'sms' ? this.requestForm.value : '',
     };
 
     // Call API to request OTP
     this.authService.requestOtp(this.otpPayload).subscribe({
       next: (response) => {
-        console.log("Request Response:", response);
+        console.log('Request Response:', response);
         this.isLoading.set(false);
         this.isOtpSent.set(true);
         this.startOtpTimeout();
       },
       error: (error) => {
-        console.error("Request Details: ", error);
-        this.errorMessage = "Request Failure.";
+        console.error('Request Details: ', error);
+        this.errorMessage = 'Request Failure.';
         this.isOtpSent.set(false);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
   goBack(): void {
     this.router.navigate(['/forgot-password'], {
       queryParams: {
-        ...(this.isDeviceOTP() ? { title: this.title() } : {})
-      }
+        ...(this.isDeviceOTP() ? { title: this.title() } : {}),
+      },
     });
   }
   // verifyMethod=sms&sms=minhchau&title=Xác%20minh%20thiết%20bị
@@ -246,7 +263,7 @@ export class OtpVerification {
     }
 
     this.intervalId = setInterval(() => {
-      this.otpTime.update(time => time - 1);
+      this.otpTime.update((time) => time - 1);
 
       if (this.otpTime() <= 0) {
         this.isOtpActive.set(false);

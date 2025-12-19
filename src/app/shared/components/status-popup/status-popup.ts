@@ -4,8 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-status-popup',
   templateUrl: './status-popup.html',
-  styleUrls: ['./status-popup.css'],
-  imports: [RouterLink]
+  imports: [RouterLink],
 })
 export class StatusPopupComponent {
   @Input() isOpen: boolean = false;
@@ -18,9 +17,7 @@ export class StatusPopupComponent {
   @Output() closePopup = new EventEmitter<void>();
   @Output() buttonClick = new EventEmitter<void>();
 
-  constructor(
-    readonly router: Router
-  ) { }
+  constructor(readonly router: Router) {}
 
   onClose(): void {
     document.body.style.cursor = 'default';

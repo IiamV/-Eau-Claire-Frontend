@@ -1,4 +1,14 @@
-import { Component, Output, EventEmitter, Input, ViewChildren, QueryList, ElementRef, OnInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,9 +16,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './otp-input.html',
-  styleUrls: ['./otp-input.css']
 })
-export class OtpInputComponent implements OnInit {
+export class OtpInputComponent implements OnInit, AfterViewInit {
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   @Input() otpLength: number = 1;
@@ -88,9 +97,9 @@ export class OtpInputComponent implements OnInit {
       default:
         if (/^\d$/.test(event.key)) {
           this.handleDigitInput(event.key, index);
-          event.preventDefault();  // ← this line is crucial
+          event.preventDefault(); // ← this line is crucial
         } else if (event.key.length === 1) {
-          event.preventDefault();  // ← blocks other key combos too
+          event.preventDefault(); // ← blocks other key combos too
         }
     }
   }
@@ -115,7 +124,7 @@ export class OtpInputComponent implements OnInit {
     if (!this.otp[index] && index > 0) {
       const prevInput = this.otpInputs.toArray()[index - 1];
       if (prevInput) {
-        prevInput.nativeElement.value = '';  // ← Added this to clear the input element
+        prevInput.nativeElement.value = ''; // ← Added this to clear the input element
       }
       this.focusInput(index - 1);
     } else {
@@ -143,7 +152,7 @@ export class OtpInputComponent implements OnInit {
     const digitsArray = digits.slice(0, this.otpLength).split('');
     const inputs = this.otpInputs.toArray();
 
-    for (let i = 0; i < digitsArray.length && (startIndex + i) < this.otpLength; i++) {
+    for (let i = 0; i < digitsArray.length && startIndex + i < this.otpLength; i++) {
       const currentIndex = startIndex + i;
       this.otp[currentIndex] = digitsArray[i];
 
@@ -154,9 +163,10 @@ export class OtpInputComponent implements OnInit {
     }
 
     const nextEmptyIndex = this.otp.findIndex((digit, idx) => idx > startIndex && !digit);
-    const focusIndex = nextEmptyIndex !== -1
-      ? nextEmptyIndex
-      : Math.min(startIndex + digitsArray.length, this.otpLength - 1);
+    const focusIndex =
+      nextEmptyIndex === -1
+        ? Math.min(startIndex + digitsArray.length, this.otpLength - 1)
+        : nextEmptyIndex;
 
     this.focusInput(focusIndex);
     this.emitOtpChange();
@@ -172,7 +182,7 @@ export class OtpInputComponent implements OnInit {
   }
 
   private checkCompletion(): void {
-    if (this.otp.every(digit => digit !== '') && this.otp.length === this.otpLength) {
+    if (this.otp.every((digit) => digit !== '') && this.otp.length === this.otpLength) {
       this.otpComplete.emit(this.otp.join(''));
     }
   }
@@ -184,7 +194,7 @@ export class OtpInputComponent implements OnInit {
   // Public API methods
   public clearOtp(): void {
     this.otp = new Array(this.otpLength).fill('');
-    this.otpInputs.forEach(input => {
+    this.otpInputs.forEach((input) => {
       input.nativeElement.value = '';
     });
     if (!this.isDisabled) {
